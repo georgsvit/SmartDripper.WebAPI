@@ -24,6 +24,7 @@ namespace SmartDripper.WebAPI.Data
         public DbSet<Device> Devices { get; set; }
         public DbSet<Doctor> Doctors { get; set; }
         public DbSet<Nurse> Nurses { get; set; }
+        public DbSet<UserIdentity> UserIdentities { get; set; }
         public DbSet<Appointment> Appointments { get; set; }
         public DbSet<Disease> Diseases { get; set; }
         public DbSet<Manufacturer> Manufacturers { get; set; }
