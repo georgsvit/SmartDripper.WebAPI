@@ -12,6 +12,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
 using SmartDripper.WebAPI.Data;
+using SmartDripper.WebAPI.ServiceInstallations;
 
 namespace SmartDripper.WebAPI
 {
@@ -24,20 +25,11 @@ namespace SmartDripper.WebAPI
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
-
-            services.AddDbContext<ApplicationContext>(options =>
-#if DEBUG 
-                    options.UseSqlServer(Configuration.GetConnectionString("DevConnection")));
-#else
-                    options.UseSqlServer(Configuration.GetConnectionString("ReleaseConnection")));
-#endif
+            services.InstallServicesInAssembly(Configuration);
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
