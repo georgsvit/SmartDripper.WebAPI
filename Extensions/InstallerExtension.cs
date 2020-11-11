@@ -1,12 +1,13 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using SmartDripper.WebAPI.ServiceInstallations;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 
-namespace SmartDripper.WebAPI.ServiceInstallations
+namespace SmartDripper.WebAPI.Extensions
 {
     public static class InstallerExtension
     {

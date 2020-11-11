@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace SmartDripper.WebAPI.Models.Users.Base
+namespace SmartDripper.WebAPI.Models.Users
 {
-    public class BasePersonifiedUser : BaseUser
+    public class DetailedUser : User
     {
-        protected BasePersonifiedUser() { }
+        protected DetailedUser() { }
 
-        public BasePersonifiedUser(string name, string surname, string login, string password, string role) 
+        public DetailedUser(string name, string surname, string login, string password, string role) 
             : base(login, password, role)
         {
             Name = name;

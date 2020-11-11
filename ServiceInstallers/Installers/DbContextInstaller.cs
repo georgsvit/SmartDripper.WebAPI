@@ -14,13 +14,13 @@ namespace SmartDripper.WebAPI.ServiceInstallations.Installers
         public void InstallServices(IServiceCollection services, IConfiguration configuration)
         {
 #if DEBUG
-            string connectionString = configuration.GetConnectionString("DevConnection");
+            string connection = configuration.GetConnectionString("DevConnection");
 #else
-            string connectionString = configuration.GetConnectionString("ReleaseConnection");
+            string connection = configuration.GetConnectionString("ReleaseConnection");
 #endif
 
             services.AddDbContext<ApplicationContext>(options =>
-                options.UseSqlServer(connectionString)
+                options.UseSqlServer(connection)
             );
         }
     }

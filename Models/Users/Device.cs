@@ -1,5 +1,4 @@
-﻿using SmartDripper.WebAPI.Models.Users.Base;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -13,11 +12,11 @@ namespace SmartDripper.WebAPI.Models.Users
         Blocked
     }
 
-    public class Device : BaseUser
+    public class Device : User
     {
         private Device() { }
 
-        public Device(string login, string password, string name, string surname)
+        public Device(string login, string password)
             : base(login, password, Roles.DEVICE) 
         {
             State = DeviceState.Inactive;

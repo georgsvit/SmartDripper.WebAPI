@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SmartDripper.WebAPI.Models.Users
 {
-    public class Nurse : BasePersonifiedUser
+    public class Nurse : DetailedUser
     {
         private Nurse() { }
 

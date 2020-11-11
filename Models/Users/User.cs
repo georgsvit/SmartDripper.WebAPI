@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace SmartDripper.WebAPI.Models.Users.Base
+namespace SmartDripper.WebAPI.Models.Users
 {
-    public abstract class BaseUser
+    public abstract class User
     {
-        protected BaseUser() { }
+        protected User() { }
 
-        protected BaseUser(string login, string password, string role)
+        protected User(string login, string password, string role)
         {
             Id = Guid.NewGuid();
             UserIdentity = new UserIdentity(Id, login, password, role);
