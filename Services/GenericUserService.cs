@@ -14,16 +14,16 @@ namespace SmartDripper.WebAPI.Services
         protected readonly JWTTokenService tokenService;
         protected readonly IDataProtector dataProtector;
 
-        protected GenericUserService(ApplicationContext applicationContext, JWTTokenService tokenService, IDataProtector dataProtector)
+        protected GenericUserService(ApplicationContext applicationContext, JWTTokenService tokenService, IDataProtectionProvider provider)
         {
             this.applicationContext = applicationContext;
             this.tokenService = tokenService;
-            this.dataProtector = dataProtector;
+            this.dataProtector = provider.CreateProtector("GenericUserService");
         }
 
-        public async Task RegisterUserAsync<TUser>(TUser user) where TUser : User
+        public async Task RegisterAsync<TUser>(TUser user) where TUser : User
         {
-            if (await IsUserRegisteredAsync(user))
+            if (await IsRegisteredAsync(user))
             {
                 throw new Exception("The user with such login is already registered.");
             }
@@ -49,11 +49,10 @@ namespace SmartDripper.WebAPI.Services
         private void ProtectPassword<TUser>(TUser user) where TUser : User =>
             user.UserIdentity.Password = dataProtector.Protect(user.UserIdentity.Password);
 
-        private async Task<bool> IsUserRegisteredAsync<TUser>(TUser user) where TUser : User
+        private async Task<bool> IsRegisteredAsync<TUser>(TUser user) where TUser : User
         {
-            UserIdentity registeredIdentity = await GetIdentityByLoginAsync(user.UserIdentity.Login);
-            bool isAlreadyRegistered = registeredIdentity != null;
-            return isAlreadyRegistered;
+            UserIdentity identity = await GetIdentityByLoginAsync(user.UserIdentity.Login);
+            return identity != null;
         }
 
         private async Task<UserIdentity> GetIdentityByLoginAsync(string login) =>

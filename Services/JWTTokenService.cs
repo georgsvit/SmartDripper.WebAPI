@@ -21,6 +21,7 @@ namespace SmartDripper.WebAPI.Services
         public JwtSecurityToken CreateJWTToken(UserIdentity identity)
         {
             var now = DateTime.UtcNow;
+            
             var JWTToken = new JwtSecurityToken(
                 issuer: jWTOptions.Issuer,
                 audience: jWTOptions.Audience,

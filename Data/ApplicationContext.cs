@@ -16,7 +16,7 @@ namespace SmartDripper.WebAPI.Data
             modelBuilder.Entity<Device>().HasOne(d => d.Procedure).WithOne(p => p.Device).HasForeignKey<Procedure>(p => p.DeviceId);
         }
 
-        public DbSet<Admin> Admin { get; set; }
+        public DbSet<Admin> Admins { get; set; }
         public DbSet<Device> Devices { get; set; }
         public DbSet<Doctor> Doctors { get; set; }
         public DbSet<Nurse> Nurses { get; set; }

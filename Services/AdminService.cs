@@ -10,13 +10,13 @@ namespace SmartDripper.WebAPI.Services
 {
     public class AdminService : GenericUserService
     {
-        public AdminService(ApplicationContext applicationContext, JWTTokenService tokenService, IDataProtector dataProtector)
-            : base(applicationContext, tokenService, dataProtector) { }
+        public AdminService(ApplicationContext applicationContext, JWTTokenService tokenService, IDataProtectionProvider provider)
+            : base(applicationContext, tokenService, provider) { }
 
         public async Task<DetailedUserResponse> LoginAsync(LoginRequest loginRequest)
         {
             var identity = await GetIdentityAsync(loginRequest);
-            var user = await applicationContext.Admin.FindAsync(identity.Id);
+            var user = await applicationContext.Admins.FindAsync(identity.Id);
             if (user == null) throw new Exception("Login failed. The user is not an admin.");
 
             JwtSecurityToken token = tokenService.CreateJWTToken(identity);
