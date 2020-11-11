@@ -14,5 +14,9 @@ namespace SmartDripper.WebAPI.Contracts
         public const string NurseBase = "nurses";
         public const string NurseLogin = NurseBase + "/login";
         public const string NurseRegister = NurseBase + "/register";
+
+        public const string DoctorBase = "doctors";
+        public const string DoctorLogin = DoctorBase + "/login";
+        public const string DoctorRegister = DoctorBase + "/register";
     }
 }
