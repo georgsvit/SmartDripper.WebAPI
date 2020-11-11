@@ -1,8 +1,4 @@
-﻿using SmartDripper.WebAPI.Models.Users.Base;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace SmartDripper.WebAPI.Models.Users
 {
@@ -11,7 +7,7 @@ namespace SmartDripper.WebAPI.Models.Users
         private Nurse() { }
 
         public Nurse(string login, string password, string name, string surname)
-            : base(login, password, Roles.NURSE, name, surname) 
+            : base(login, password, Roles.NURSE, name, surname)
         {
             Procedures = new List<Procedure>();
         }

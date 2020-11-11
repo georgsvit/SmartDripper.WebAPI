@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace SmartDripper.WebAPI.Models.Users
+﻿namespace SmartDripper.WebAPI.Models.Users
 {
     public class DetailedUser : User
     {
         protected DetailedUser() { }
 
-        public DetailedUser(string name, string surname, string login, string password, string role) 
+        public DetailedUser(string name, string surname, string login, string password, string role)
             : base(login, password, role)
         {
             Name = name;

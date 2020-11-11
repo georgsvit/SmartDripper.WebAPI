@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace SmartDripper.WebAPI.Models
 {
@@ -13,7 +10,7 @@ namespace SmartDripper.WebAPI.Models
         {
             Title = title;
             SymptomUk = symptomUk;
-            SymptomUa = symptomUa; 
+            SymptomUa = symptomUa;
             Id = Guid.NewGuid();
         }
 

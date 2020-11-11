@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace SmartDripper.WebAPI.Models.Users
+﻿namespace SmartDripper.WebAPI.Models.Users
 {
     public enum DeviceState
     {
@@ -17,7 +12,7 @@ namespace SmartDripper.WebAPI.Models.Users
         private Device() { }
 
         public Device(string login, string password)
-            : base(login, password, Roles.DEVICE) 
+            : base(login, password, Roles.DEVICE)
         {
             State = DeviceState.Inactive;
             IsTurnedOn = false;
