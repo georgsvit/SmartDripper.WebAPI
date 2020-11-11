@@ -7,7 +7,7 @@ namespace SmartDripper.WebAPI.Models.Users
         private Doctor() { }
 
         public Doctor(string login, string password, string name, string surname)
-            : base(login, password, Roles.DOCTOR, name, surname)
+            : base(name, surname, login, password, Roles.DOCTOR)
         {
             Appointments = new List<Appointment>();
         }

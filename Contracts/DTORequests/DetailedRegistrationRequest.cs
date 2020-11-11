@@ -1,6 +1,6 @@
 ﻿namespace SmartDripper.WebAPI.Contracts.DTORequests
 {
-    public class AdminRegistrationRequest
+    public class DetailedRegistrationRequest
     {
         public string Login { get; set; }
         public string Password { get; set; }

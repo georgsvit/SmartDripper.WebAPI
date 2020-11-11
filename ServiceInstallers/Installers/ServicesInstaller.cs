@@ -15,6 +15,7 @@ namespace SmartDripper.WebAPI.ServiceInstallers.Installers
         public void InstallServices(IServiceCollection services, IConfiguration configuration)
         {
             services.AddTransient<AdminService>();
+            services.AddTransient<NurseService>();
             services.AddTransient<JWTTokenService>();
         }
     }

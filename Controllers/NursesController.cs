@@ -2,53 +2,51 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SmartDripper.WebAPI.Contracts;
 using SmartDripper.WebAPI.Contracts.DTORequests;
 using SmartDripper.WebAPI.Contracts.DTOResponses;
-using SmartDripper.WebAPI.Models;
 using SmartDripper.WebAPI.Models.Users;
 using SmartDripper.WebAPI.Services;
 
 namespace SmartDripper.WebAPI.Controllers
 {
     [ApiController]
-    public class AdminsController : ControllerBase
+    public class NursesController : ControllerBase
     {
-        private readonly AdminService adminService;
+        private readonly NurseService nurseService;
 
-        public AdminsController(AdminService adminService)
+        public NursesController(NurseService nurseService)
         {
-            this.adminService = adminService;
+            this.nurseService = nurseService;
         }
 
-        [HttpPost(Routes.AdminLogin)]
+        [HttpPost(Routes.NurseLogin)]
         public async Task<IActionResult> Login(LoginRequest loginRequest)
         {
             try
             {
-                var response = await adminService.LoginAsync(loginRequest);
+                var response = await nurseService.LoginAsync(loginRequest);
                 return Ok(response);
-            } catch (Exception e)
+            }
+            catch (Exception e)
             {
                 return BadRequest(new BadRequestResponse(e.Message));
             }
         }
 
-        [HttpPost(Routes.AdminRegister)]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = Roles.ADMIN)]
+        [HttpPost(Routes.NurseRegister)]
         public async Task<IActionResult> Register([FromBody] DetailedRegistrationRequest request)
         {
-            Admin admin = new Admin(request.Login, request.Password, request.Name, request.Surname);
+            Nurse nurse = new Nurse(request.Login, request.Password, request.Name, request.Surname);
 
             try
             {
-                await adminService.RegisterAsync(admin);
+                await nurseService.RegisterAsync(nurse);
                 return Ok();
-            } catch (Exception e)
+            }
+            catch (Exception e)
             {
                 return BadRequest(new BadRequestResponse(e.Message));
             }
