@@ -10,9 +10,11 @@ namespace SmartDripper.WebAPI.Models.Users
         {
             Id = Guid.NewGuid();
             UserIdentity = new UserIdentity(Id, login, password, role);
+            UserIdentityId = Id;
         }
 
         public Guid Id { get; set; }
+        public Guid UserIdentityId { get; set; }
         public UserIdentity UserIdentity { get; set; }
     }
 }

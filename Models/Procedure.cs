@@ -7,20 +7,23 @@ namespace SmartDripper.WebAPI.Models
     {
         private Procedure() { }
 
-        public Procedure(Guid deviceId, Appointment appointment, Nurse nurse)
+        public Procedure(Guid nurseId, Guid deviceId, Guid appointmentId)
         {
+            NurseId = nurseId;
             DeviceId = deviceId;
-            Appointment = appointment;
-            Nurse = nurse;
+            AppointmentId = appointmentId;
             IsAutonomous = false;
-            Device = null;
             Id = Guid.NewGuid();
         }
 
         public Guid Id { get; set; }
-        public Guid DeviceId { get; set; }
-        public Device Device { get; set; }
+        public Guid? NurseId { get; set; }
+        public Guid? DeviceId { get; set; }
+        public Guid? AppointmentId { get; set; }
         public bool IsAutonomous { get; set; }
+
+        //
+        public Device Device { get; set; }
         public Appointment Appointment { get; set; }
         public Nurse Nurse { get; set; }
     }

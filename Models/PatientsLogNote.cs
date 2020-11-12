@@ -6,15 +6,18 @@ namespace SmartDripper.WebAPI.Models.Users
     {
         private PatientsLogNote() { }
 
-        public PatientsLogNote(Patient patient)
+        public PatientsLogNote(Guid patientId)
         {
-            Patient = patient;
+            PatientId = patientId;
             Date = DateTime.Now;
             Id = Guid.NewGuid();
         }
 
         public Guid Id { get; set; }
+        public Guid? PatientId { get; set; }
         public DateTime Date { get; set; }
+
+        //
         public Patient Patient { get; set; }
     }
 }

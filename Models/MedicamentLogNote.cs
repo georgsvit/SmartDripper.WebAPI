@@ -6,14 +6,15 @@ namespace SmartDripper.WebAPI.Models
     {
         private MedicamentLogNote() { }
 
-        public MedicamentLogNote(Medicament medicament)
+        public MedicamentLogNote(Guid medicamentId)
         {
-            Medicament = medicament;
+            MedicamentId = medicamentId;
             Date = DateTime.Now;
             Id = Guid.NewGuid();
         }
 
         public Guid Id { get; set; }
+        public Guid? MedicamentId { get; set; }
         public DateTime Date { get; set; }
 
         //

@@ -20,16 +20,16 @@ namespace SmartDripper.WebAPI.Models
         }
 
         public Guid Id { get; set; }
-        public string Title { get; set; }
-        public string Description { get; set; }
         public Guid? ManufacturerId { get; set; }
         public Guid? MedicalProtocolId { get; set; }
+        public string Title { get; set; }
+        public string Description { get; set; }
 
         //
         public Manufacturer Manufacturer { get; set; }
         public MedicalProtocol MedicalProtocol { get; set; }
-        public List<Appointment> Appointments { get; set; }
 
+        public List<Appointment> Appointments { get; set; }
         public List<MedicamentLogNote> MedicamentLogNotes { get; set; }
         public List<Order> Orders { get; set; }
 

@@ -7,8 +7,9 @@ namespace SmartDripper.WebAPI.Models
     {
         private MedicalProtocol() { }
 
-        public MedicalProtocol(string title, string description, double maxTemp, double minTemp, int maxPulse, int minPulse, int maxBloodPressure, int minBloodPressure, Disease disease)
+        public MedicalProtocol(Guid diseaseId, string title, string description, double maxTemp, double minTemp, int maxPulse, int minPulse, int maxBloodPressure, int minBloodPressure)
         {
+            DiseaseId = diseaseId;
             Title = title;
             Description = description;
             MaxTemp = maxTemp;
@@ -17,12 +18,12 @@ namespace SmartDripper.WebAPI.Models
             MinPulse = minPulse;
             MaxBloodPressure = maxBloodPressure;
             MinBloodPressure = minBloodPressure;
-            Disease = disease;
             Medicaments = new List<Medicament>();
             Id = Guid.NewGuid();
         }
 
         public Guid Id { get; set; }
+        public Guid? DiseaseId { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
         public double MaxTemp { get; set; }

@@ -1,5 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
-using System;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace SmartDripper.WebAPI.Migrations
 {
@@ -41,7 +41,7 @@ namespace SmartDripper.WebAPI.Migrations
                     Id = table.Column<Guid>(nullable: false),
                     Name = table.Column<string>(nullable: true),
                     Surname = table.Column<string>(nullable: true),
-                    DOB = table.Column<DateTime>(nullable: false),
+                    DOB = table.Column<string>(nullable: true),
                     Comment = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
@@ -50,7 +50,7 @@ namespace SmartDripper.WebAPI.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "UserIdentity",
+                name: "UserIdentities",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
@@ -60,7 +60,7 @@ namespace SmartDripper.WebAPI.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_UserIdentity", x => x.Id);
+                    table.PrimaryKey("PK_UserIdentities", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -68,6 +68,7 @@ namespace SmartDripper.WebAPI.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
+                    DiseaseId = table.Column<Guid>(nullable: false),
                     Title = table.Column<string>(nullable: true),
                     Description = table.Column<string>(nullable: true),
                     MaxTemp = table.Column<double>(nullable: false),
@@ -75,8 +76,7 @@ namespace SmartDripper.WebAPI.Migrations
                     MaxPulse = table.Column<int>(nullable: false),
                     MinPulse = table.Column<int>(nullable: false),
                     MaxBloodPressure = table.Column<int>(nullable: false),
-                    MinBloodPressure = table.Column<int>(nullable: false),
-                    DiseaseId = table.Column<Guid>(nullable: true)
+                    MinBloodPressure = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -86,7 +86,7 @@ namespace SmartDripper.WebAPI.Migrations
                         column: x => x.DiseaseId,
                         principalTable: "Diseases",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -94,8 +94,8 @@ namespace SmartDripper.WebAPI.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
-                    Date = table.Column<DateTime>(nullable: false),
-                    PatientId = table.Column<Guid>(nullable: true)
+                    PatientId = table.Column<Guid>(nullable: false),
+                    Date = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -105,27 +105,27 @@ namespace SmartDripper.WebAPI.Migrations
                         column: x => x.PatientId,
                         principalTable: "Patients",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Admin",
+                name: "Admins",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
-                    UserIdentityId = table.Column<Guid>(nullable: true),
+                    UserIdentityId = table.Column<Guid>(nullable: false),
                     Name = table.Column<string>(nullable: true),
                     Surname = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Admin", x => x.Id);
+                    table.PrimaryKey("PK_Admins", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Admin_UserIdentity_UserIdentityId",
+                        name: "FK_Admins_UserIdentities_UserIdentityId",
                         column: x => x.UserIdentityId,
-                        principalTable: "UserIdentity",
+                        principalTable: "UserIdentities",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -133,7 +133,7 @@ namespace SmartDripper.WebAPI.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
-                    UserIdentityId = table.Column<Guid>(nullable: true),
+                    UserIdentityId = table.Column<Guid>(nullable: false),
                     State = table.Column<int>(nullable: false),
                     IsTurnedOn = table.Column<bool>(nullable: false)
                 },
@@ -141,11 +141,11 @@ namespace SmartDripper.WebAPI.Migrations
                 {
                     table.PrimaryKey("PK_Devices", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Devices_UserIdentity_UserIdentityId",
+                        name: "FK_Devices_UserIdentities_UserIdentityId",
                         column: x => x.UserIdentityId,
-                        principalTable: "UserIdentity",
+                        principalTable: "UserIdentities",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -153,7 +153,7 @@ namespace SmartDripper.WebAPI.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
-                    UserIdentityId = table.Column<Guid>(nullable: true),
+                    UserIdentityId = table.Column<Guid>(nullable: false),
                     Name = table.Column<string>(nullable: true),
                     Surname = table.Column<string>(nullable: true)
                 },
@@ -161,11 +161,11 @@ namespace SmartDripper.WebAPI.Migrations
                 {
                     table.PrimaryKey("PK_Doctors", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Doctors_UserIdentity_UserIdentityId",
+                        name: "FK_Doctors_UserIdentities_UserIdentityId",
                         column: x => x.UserIdentityId,
-                        principalTable: "UserIdentity",
+                        principalTable: "UserIdentities",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -173,7 +173,7 @@ namespace SmartDripper.WebAPI.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
-                    UserIdentityId = table.Column<Guid>(nullable: true),
+                    UserIdentityId = table.Column<Guid>(nullable: false),
                     Name = table.Column<string>(nullable: true),
                     Surname = table.Column<string>(nullable: true)
                 },
@@ -181,11 +181,11 @@ namespace SmartDripper.WebAPI.Migrations
                 {
                     table.PrimaryKey("PK_Nurses", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Nurses_UserIdentity_UserIdentityId",
+                        name: "FK_Nurses_UserIdentities_UserIdentityId",
                         column: x => x.UserIdentityId,
-                        principalTable: "UserIdentity",
+                        principalTable: "UserIdentities",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -193,10 +193,10 @@ namespace SmartDripper.WebAPI.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
+                    ManufacturerId = table.Column<Guid>(nullable: false),
+                    MedicalProtocolId = table.Column<Guid>(nullable: false),
                     Title = table.Column<string>(nullable: true),
-                    Description = table.Column<string>(nullable: true),
-                    ManufacturerId = table.Column<Guid>(nullable: true),
-                    MedicalProtocolId = table.Column<Guid>(nullable: true)
+                    Description = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -206,13 +206,13 @@ namespace SmartDripper.WebAPI.Migrations
                         column: x => x.ManufacturerId,
                         principalTable: "Manufacturers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Medicaments_MedicalProtocols_MedicalProtocolId",
                         column: x => x.MedicalProtocolId,
                         principalTable: "MedicalProtocols",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -220,9 +220,9 @@ namespace SmartDripper.WebAPI.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
-                    DoctorId = table.Column<Guid>(nullable: true),
-                    MedicamentId = table.Column<Guid>(nullable: true),
-                    PatientId = table.Column<Guid>(nullable: true),
+                    MedicamentId = table.Column<Guid>(nullable: false),
+                    PatientId = table.Column<Guid>(nullable: false),
+                    DoctorId = table.Column<Guid>(nullable: false),
                     IsDone = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
@@ -233,19 +233,19 @@ namespace SmartDripper.WebAPI.Migrations
                         column: x => x.DoctorId,
                         principalTable: "Doctors",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Appointments_Medicaments_MedicamentId",
                         column: x => x.MedicamentId,
                         principalTable: "Medicaments",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Appointments_Patients_PatientId",
                         column: x => x.PatientId,
                         principalTable: "Patients",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -253,8 +253,8 @@ namespace SmartDripper.WebAPI.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
-                    Date = table.Column<DateTime>(nullable: false),
-                    MedicamentId = table.Column<Guid>(nullable: true)
+                    MedicamentId = table.Column<Guid>(nullable: false),
+                    Date = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -264,7 +264,7 @@ namespace SmartDripper.WebAPI.Migrations
                         column: x => x.MedicamentId,
                         principalTable: "Medicaments",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -272,8 +272,8 @@ namespace SmartDripper.WebAPI.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
-                    Count = table.Column<int>(nullable: false),
-                    MedicamentId = table.Column<Guid>(nullable: true)
+                    MedicamentId = table.Column<Guid>(nullable: false),
+                    Count = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -283,7 +283,7 @@ namespace SmartDripper.WebAPI.Migrations
                         column: x => x.MedicamentId,
                         principalTable: "Medicaments",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -291,10 +291,10 @@ namespace SmartDripper.WebAPI.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
+                    NurseId = table.Column<Guid>(nullable: false),
                     DeviceId = table.Column<Guid>(nullable: false),
-                    IsAutonomous = table.Column<bool>(nullable: false),
-                    AppointmentId = table.Column<Guid>(nullable: true),
-                    NurseId = table.Column<Guid>(nullable: true)
+                    AppointmentId = table.Column<Guid>(nullable: false),
+                    IsAutonomous = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -310,7 +310,7 @@ namespace SmartDripper.WebAPI.Migrations
                         column: x => x.DeviceId,
                         principalTable: "Devices",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Procedures_Nurses_NurseId",
                         column: x => x.NurseId,
@@ -320,8 +320,8 @@ namespace SmartDripper.WebAPI.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Admin_UserIdentityId",
-                table: "Admin",
+                name: "IX_Admins_UserIdentityId",
+                table: "Admins",
                 column: "UserIdentityId");
 
             migrationBuilder.CreateIndex(
@@ -404,7 +404,7 @@ namespace SmartDripper.WebAPI.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Admin");
+                name: "Admins");
 
             migrationBuilder.DropTable(
                 name: "MedicamentLogNotes");
@@ -437,7 +437,7 @@ namespace SmartDripper.WebAPI.Migrations
                 name: "Patients");
 
             migrationBuilder.DropTable(
-                name: "UserIdentity");
+                name: "UserIdentities");
 
             migrationBuilder.DropTable(
                 name: "Manufacturers");

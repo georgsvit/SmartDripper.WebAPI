@@ -7,19 +7,24 @@ namespace SmartDripper.WebAPI.Models
     {
         private Appointment() { }
 
-        public Appointment(Doctor doctor, Medicament medicament, Patient patient)
+        public Appointment(Guid medicamentId, Guid patientId, Guid doctorId)
         {
-            Doctor = doctor;
-            Medicament = medicament;
-            Patient = patient;
-            IsDone = false;
             Id = Guid.NewGuid();
+            MedicamentId = medicamentId;
+            PatientId = patientId;
+            DoctorId = doctorId;
+            IsDone = false;
         }
 
         public Guid Id { get; set; }
+        public Guid? MedicamentId { get; set; }
+        public Guid? PatientId { get; set; }
+        public Guid? DoctorId { get; set; }
+        public bool IsDone { get; set; }
+
+        //
         public Doctor Doctor { get; set; }
         public Medicament Medicament { get; set; }
         public Patient Patient { get; set; }
-        public bool IsDone { get; set; }
     }
 }

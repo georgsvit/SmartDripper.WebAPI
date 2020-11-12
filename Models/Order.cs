@@ -6,14 +6,15 @@ namespace SmartDripper.WebAPI.Models
     {
         private Order() { }
 
-        public Order(Medicament medicament, int count)
+        public Order(Guid medicamentId, int count)
         {
-            Medicament = medicament;
+            MedicamentId = medicamentId;
             Count = count;
             Id = Guid.NewGuid();
         }
 
         public Guid Id { get; set; }
+        public Guid? MedicamentId { get; set; }
         public int Count { get; set; }
 
         //

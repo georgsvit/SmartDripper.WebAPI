@@ -7,7 +7,7 @@ namespace SmartDripper.WebAPI.Models.Users
     {
         private Patient() { }
 
-        public Patient(string name, string surname, DateTime dOB, string comment)
+        public Patient(string name, string surname, string dOB, string comment)
         {
             Name = name;
             Surname = surname;
@@ -21,7 +21,7 @@ namespace SmartDripper.WebAPI.Models.Users
         public Guid Id { get; set; }
         public string Name { get; set; }
         public string Surname { get; set; }
-        public DateTime DOB { get; set; }
+        public string DOB { get; set; }
         public string Comment { get; set; }
 
         //
