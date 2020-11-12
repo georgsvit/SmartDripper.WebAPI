@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SmartDripper.WebAPI.Contracts;
 using SmartDripper.WebAPI.Contracts.DTORequests;
@@ -13,32 +14,32 @@ using SmartDripper.WebAPI.Services;
 namespace SmartDripper.WebAPI.Controllers
 {
     [ApiController]
-    public class DiseasesController : ControllerBase
+    public class MedicalProtocolsController : ControllerBase
     {
-        private readonly DiseaseService diseaseService;
+        private readonly MedicalProtocolService medicalProtocolService;
 
-        public DiseasesController(DiseaseService diseaseService)
+        public MedicalProtocolsController(MedicalProtocolService medicalProtocolService)
         {
-            this.diseaseService = diseaseService;
+            this.medicalProtocolService = medicalProtocolService;
         }
 
-        [HttpGet(Routes.Disease.GetAll)]
+        [HttpGet(Routes.MedicalProtocol.GetAll)]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = Roles.ADMIN)]
         public async Task<IActionResult> GetAll()
         {
-            var list = await diseaseService.GetAll();
+            var list = await medicalProtocolService.GetAll();
 
             return Ok(list);
         }
 
-        [HttpGet(Routes.Disease.Get)]
+        [HttpGet(Routes.MedicalProtocol.Get)]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = Roles.ADMIN)]
         public async Task<IActionResult> Get([FromRoute] Guid id)
         {
             try
             {
-                Disease disease = await diseaseService.GetAsync(id);
-                return Ok(disease);
+                MedicalProtocol medicalProtocol = await medicalProtocolService.GetAsync(id);
+                return Ok(medicalProtocol);
             }
             catch (Exception e)
             {
@@ -46,13 +47,13 @@ namespace SmartDripper.WebAPI.Controllers
             }
         }
 
-        [HttpPost(Routes.Disease.Create)]
+        [HttpPost(Routes.MedicalProtocol.Create)]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = Roles.ADMIN)]
-        public async Task<IActionResult> Create([FromBody] DiseaseRequest request)
+        public async Task<IActionResult> Create([FromBody] MedicalProtocolRequest request)
         {
             try
             {
-                await diseaseService.CreateAsync(request);
+                await medicalProtocolService.CreateAsync(request);
                 return Ok();
             }
             catch (Exception e)
@@ -61,13 +62,13 @@ namespace SmartDripper.WebAPI.Controllers
             }
         }
 
-        [HttpDelete(Routes.Disease.Delete)]
+        [HttpDelete(Routes.MedicalProtocol.Delete)]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = Roles.ADMIN)]
         public async Task<IActionResult> Delete([FromRoute] Guid id)
         {
             try
             {
-                await diseaseService.DeleteAsync(id);
+                await medicalProtocolService.DeleteAsync(id);
                 return Ok();
             }
             catch (Exception e)
@@ -76,14 +77,14 @@ namespace SmartDripper.WebAPI.Controllers
             }
         }
 
-        [HttpPatch(Routes.Disease.Edit)]
+        [HttpPatch(Routes.MedicalProtocol.Edit)]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = Roles.ADMIN)]
-        public async Task<IActionResult> Edit([FromRoute] Guid id, [FromBody] DiseaseRequest request)
+        public async Task<IActionResult> Edit([FromRoute] Guid id, [FromBody] MedicalProtocolRequest request)
         {
             try
             {
-                var disease = await diseaseService.EditAsync(id, request);
-                return Ok(disease);
+                var medicalProtocol = await medicalProtocolService.EditAsync(id, request);
+                return Ok(medicalProtocol);
             }
             catch (Exception e)
             {

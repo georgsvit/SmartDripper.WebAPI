@@ -48,7 +48,7 @@ namespace SmartDripper.WebAPI.Controllers
 
         [HttpPost(Routes.Medicament.Create)]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = Roles.ADMIN + "," + Roles.DOCTOR)]
-        public async Task<IActionResult> Create([FromRoute] Guid id, [FromBody] MedicamentRequest request)
+        public async Task<IActionResult> Create([FromBody] MedicamentRequest request)
         {
             try
             {

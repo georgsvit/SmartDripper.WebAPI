@@ -25,9 +25,9 @@ namespace SmartDripper.WebAPI.Services
         {
             Disease disease = new Disease(request.Title, request.SymptomUk, request.SymptomUa);
 
-            var a = await applicationContext.Diseases.FirstOrDefaultAsync(m => m.Title == request.Title);
+            var inBase = await applicationContext.Diseases.FirstOrDefaultAsync(m => m.Title == request.Title);
 
-            if (a != null) throw new Exception("Disease already exists.");
+            if (inBase != null) throw new Exception("Disease already exists.");
 
             await applicationContext.Diseases.AddAsync(disease);
             await applicationContext.SaveChangesAsync();
@@ -40,7 +40,7 @@ namespace SmartDripper.WebAPI.Services
         // TODO: Get all adjacent data
         public async Task<Disease> GetAsync(Guid id)
         {
-            Disease disease = await applicationContext.Diseases.FindAsync(id);
+            Disease disease = await applicationContext.Diseases.AsNoTracking().SingleOrDefaultAsync(x => x.Id == id);
 
             if (disease == null) throw new Exception("Disease with this identifier doesn`t exist.");
 
@@ -64,10 +64,9 @@ namespace SmartDripper.WebAPI.Services
 
             if (disease == null) throw new Exception("Disease with this identifier doesn`t exist.");
 
-            disease.SymptomUa = newDisease.SymptomUa;
-            disease.SymptomUk = newDisease.SymptomUk;
-            disease.Title = newDisease.Title;
-            
+            disease = newDisease;
+            disease.Id = id;
+
             applicationContext.Diseases.Update(disease);
             applicationContext.SaveChanges();
 

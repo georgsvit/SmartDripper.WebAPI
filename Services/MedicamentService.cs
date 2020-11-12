@@ -25,9 +25,9 @@ namespace SmartDripper.WebAPI.Services
         {
             Medicament medicament = new Medicament(request.Title, request.Description, request.ManufacturerId, request.MedicalProtocolId);
 
-            var a = await applicationContext.Medicaments.FirstOrDefaultAsync(m => m.Title == request.Title && m.Description == request.Description);
+            var inBase = await applicationContext.Medicaments.FirstOrDefaultAsync(m => m.Title == request.Title && m.Description == request.Description);
 
-            if (a != null) throw new Exception("Medicament already exists.");
+            if (inBase != null) throw new Exception("Medicament already exists.");
 
             await applicationContext.Medicaments.AddAsync(medicament);
             await applicationContext.SaveChangesAsync();
@@ -40,7 +40,7 @@ namespace SmartDripper.WebAPI.Services
         // TODO: Get all adjacent data
         public async Task<Medicament> GetAsync(Guid id)
         {          
-            Medicament medicament = await applicationContext.Medicaments.FindAsync(id);
+            Medicament medicament = await applicationContext.Medicaments.AsNoTracking().SingleOrDefaultAsync(x => x.Id == id);
 
             if (medicament == null) throw new Exception("Medicament with this identifier doesn`t exist.");
 
@@ -63,14 +63,12 @@ namespace SmartDripper.WebAPI.Services
             Medicament medicament = await GetAsync(id);
 
             if (medicament == null) throw new Exception("Medicament with this identifier doesn`t exist.");
-
-            medicament.Title = newMedicament.Title;
-            medicament.Description = newMedicament.Description;
-            medicament.ManufacturerId = newMedicament.ManufacturerId;
-            medicament.MedicalProtocolId = newMedicament.MedicalProtocolId;
+            
+            medicament = newMedicament;
+            medicament.Id = id;
 
             applicationContext.Medicaments.Update(medicament);
-            applicationContext.SaveChanges();
+            await applicationContext.SaveChangesAsync();
 
             return await GetAsync(medicament.Id);
         }
