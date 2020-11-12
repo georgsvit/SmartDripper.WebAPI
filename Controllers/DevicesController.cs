@@ -143,7 +143,6 @@ namespace SmartDripper.WebAPI.Controllers
             }
         }
 
-
         [HttpGet(Routes.DeviceGetConfiguration)]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = Roles.DEVICE)]
         public async Task<IActionResult> GetConfigurationAsync()

@@ -66,7 +66,7 @@ namespace SmartDripper.WebAPI.Services
                 .ThenInclude(p => p.Appointment).ThenInclude(a => a.Medicament).ThenInclude(m => m.MedicalProtocol).ThenInclude(mp => mp.Disease)
                 .FirstOrDefaultAsync(d => d.Id == deviceId);
 
-            if (device == null) throw new Exception("Device with this identifier doesn`t exist");
+            if (device == null) throw new Exception("Device with this identifier doesn`t exist.");
             return device;
         }
                  

@@ -22,13 +22,19 @@ namespace SmartDripper.WebAPI.Contracts
         public const string DeviceBase = "devices";
         public const string DeviceGetAll = DeviceBase;
         public const string DeviceGet = DeviceBase + "/{deviceId}";
-
         public const string DeviceLogin = DeviceBase + "/login";
         public const string DeviceRegister = DeviceBase + "/register";
         public const string DeviceDelete = DeviceBase + "/delete";
-
         public const string DeviceReset = DeviceBase + "/{deviceId}/reset";
         public const string DeviceUpdate = DeviceBase + "/{deviceId}/update";
         public const string DeviceGetConfiguration = DeviceBase + "/getconfig";
+
+        public const string MedicamentBase = "medicaments";
+        public const string MedicamentGetAll = MedicamentBase;
+        public const string MedicamentGet = MedicamentBase + "/{Id}";
+        public const string MedicamentDelete = MedicamentBase + "/delete/{Id}";
+        public const string MedicamentEdit = MedicamentBase + "/edit/{Id}";
+        public const string MedicamentCreate = MedicamentBase + "/create";
+        
     }
 }
