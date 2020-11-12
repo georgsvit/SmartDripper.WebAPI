@@ -74,7 +74,6 @@ namespace SmartDripper.WebAPI.Controllers
             }
         }
 
-
         // TODO: Return device with all adjacent objects (now only device)
 
         [HttpGet(Routes.DeviceGetAll)]
@@ -121,6 +120,21 @@ namespace SmartDripper.WebAPI.Controllers
             try
             {
                 await deviceService.ResetAsync(deviceId, request.NewPassword);
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpPatch(Routes.DeviceUpdate)]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = Roles.ADMIN + "," + Roles.NURSE)]
+        public async Task<IActionResult> UpdateAsync([FromRoute] Guid deviceId, [FromBody] DeviceUpdateRequest request)
+        {
+            try
+            {
+                await deviceService.UpdateConfigurationAsync(deviceId, request);
                 return Ok();
             }
             catch (Exception e)

@@ -54,7 +54,6 @@ namespace SmartDripper.WebAPI.Services
                 .ThenInclude(p => p.Appointment).ThenInclude(a => a.Medicament).ThenInclude(m => m.MedicalProtocol).ThenInclude(mp => mp.Disease)
                 .ToListAsync();
 
-
         public async Task<Device> GetOneAsync(Guid deviceId)
         {
             Device device = await applicationContext.Devices
@@ -70,8 +69,7 @@ namespace SmartDripper.WebAPI.Services
             if (device == null) throw new Exception("Device with this identifier doesn`t exist");
             return device;
         }
-         
-        
+                 
         public async Task ResetAsync(Guid identityId, string newPassword)
         {
             var identity = await applicationContext.UserIdentities.FindAsync(identityId);
@@ -89,6 +87,18 @@ namespace SmartDripper.WebAPI.Services
             string login = identity.Login;
             await DeleteAsync(identity.Id, smartDevice.Id);
             await RegisterAsync(new Device(login, newPassword));
+        }
+
+        public async Task UpdateConfigurationAsync(Guid deviceId, DeviceUpdateRequest request)
+        {
+            Device device = await GetOneAsync(deviceId);
+
+            device.IsTurnedOn = request.IsTurnedOn;
+            device.State = request.DeviceState;
+            if (request.ProcedureId != null) device.Procedure = await applicationContext.Procedures.FindAsync(request.ProcedureId);
+
+            await applicationContext.SaveChangesAsync();
+            // TODO: Send message to iot
         }
     }
 }
