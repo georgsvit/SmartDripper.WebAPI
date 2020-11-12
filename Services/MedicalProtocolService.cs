@@ -25,7 +25,7 @@ namespace SmartDripper.WebAPI.Services
         {
             MedicalProtocol medicalProtocol = new MedicalProtocol((Guid)request.DiseaseId, request.Title, request.Description, request.MaxTemp, request.MinTemp, request.MaxPulse, request.MinPulse, request.MaxBloodPressure, request.MinBloodPressure);
 
-            var inBase = await applicationContext.MedicalProtocols.FirstOrDefaultAsync(m => m.Title == request.Title);
+            var inBase = await applicationContext.MedicalProtocols.FirstOrDefaultAsync(x => x.Title == request.Title);
 
             if (inBase != null) throw new Exception("MedicalProtocol already exists.");
 

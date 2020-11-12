@@ -25,7 +25,7 @@ namespace SmartDripper.WebAPI.Services
         {
             Medicament medicament = new Medicament(request.Title, request.Description, request.ManufacturerId, request.MedicalProtocolId);
 
-            var inBase = await applicationContext.Medicaments.FirstOrDefaultAsync(m => m.Title == request.Title && m.Description == request.Description);
+            var inBase = await applicationContext.Medicaments.FirstOrDefaultAsync(x => x.Title == request.Title && x.Description == request.Description);
 
             if (inBase != null) throw new Exception("Medicament already exists.");
 

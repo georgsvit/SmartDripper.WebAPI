@@ -25,7 +25,7 @@ namespace SmartDripper.WebAPI.Services
         {
             Disease disease = new Disease(request.Title, request.SymptomUk, request.SymptomUa);
 
-            var inBase = await applicationContext.Diseases.FirstOrDefaultAsync(m => m.Title == request.Title);
+            var inBase = await applicationContext.Diseases.FirstOrDefaultAsync(x => x.Title == request.Title);
 
             if (inBase != null) throw new Exception("Disease already exists.");
 
