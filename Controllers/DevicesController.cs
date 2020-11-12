@@ -70,5 +70,24 @@ namespace SmartDripper.WebAPI.Controllers
                 return BadRequest(new BadRequestResponse(e.Message));
             }
         }
+
+        [HttpGet(Routes.DeviceGetAll)]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = Roles.ADMIN + "," + Roles.NURSE)]
+        public async Task<IActionResult> GetAllAsync()
+        {
+            List<Device> devices = await deviceService.GetAllDevicesAsync();
+            
+            if (User.IsInRole(Roles.ADMIN))
+            {
+                return Ok(devices);
+            }
+            
+            if (User.IsInRole(Roles.NURSE))
+            {
+                return Ok(devices.Where(d => d.State == DeviceState.Inactive));
+            }
+
+            return BadRequest();
+        }
     }
 }

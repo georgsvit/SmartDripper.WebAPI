@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.DataProtection;
+using Microsoft.EntityFrameworkCore;
 using SmartDripper.WebAPI.Contracts.DTORequests;
 using SmartDripper.WebAPI.Contracts.DTOResponses;
 using SmartDripper.WebAPI.Data;
@@ -30,8 +31,8 @@ namespace SmartDripper.WebAPI.Services
 
         public async Task DeleteAsync(Guid deviceId, Guid identityId)
         {
-            Device device = await applicationContext.Devices.FindAsync(deviceId);
-            UserIdentity identity = await applicationContext.UserIdentities.FindAsync(identityId);
+            Device device = await applicationContext.Devices.Include(d => d.UserIdentity).FirstOrDefaultAsync(d => d.Id == deviceId);
+            UserIdentity identity = device.UserIdentity;
 
             if (identity == null || device == null) throw new Exception("Cannot delete this device.");
 
@@ -41,5 +42,16 @@ namespace SmartDripper.WebAPI.Services
             applicationContext.UserIdentities.Remove(identity);
             await applicationContext.SaveChangesAsync();
         }
+
+        public async Task<List<Device>> GetAllDevicesAsync() =>
+            await applicationContext.Devices
+                .Include(d => d.UserIdentity)
+                .Include(d => d.Procedure)
+                .ThenInclude(p => p.Nurse)
+                .Include(d => d.Procedure)
+                .ThenInclude(p => p.Appointment).ThenInclude(a => a.Patient)
+                .Include(d => d.Procedure)
+                .ThenInclude(p => p.Appointment).ThenInclude(a => a.Medicament).ThenInclude(m => m.MedicalProtocol).ThenInclude(mp => mp.Disease)
+                .ToListAsync();
     }
 }
