@@ -64,8 +64,13 @@ namespace SmartDripper.WebAPI.Services
 
             if (medicament == null) throw new Exception("Medicament with this identifier doesn`t exist.");
 
-            applicationContext.Medicaments.Update(newMedicament);
-            await applicationContext.SaveChangesAsync();
+            medicament.Title = newMedicament.Title;
+            medicament.Description = newMedicament.Description;
+            medicament.ManufacturerId = newMedicament.ManufacturerId;
+            medicament.MedicalProtocolId = newMedicament.MedicalProtocolId;
+
+            applicationContext.Medicaments.Update(medicament);
+            applicationContext.SaveChanges();
 
             return await GetAsync(medicament.Id);
         }
