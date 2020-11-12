@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -19,10 +20,12 @@ namespace SmartDripper.WebAPI.Controllers
     public class DevicesController : ControllerBase
     {
         private readonly DeviceService deviceService;
+        private readonly IMapper mapper;
 
-        public DevicesController(DeviceService deviceService)
+        public DevicesController(DeviceService deviceService, IMapper mapper)
         {
             this.deviceService = deviceService;
+            this.mapper = mapper;
         }
 
         [HttpPost(Routes.DeviceLogin)]
@@ -71,6 +74,9 @@ namespace SmartDripper.WebAPI.Controllers
             }
         }
 
+
+        // TODO: Return device with all adjacent objects (now only device)
+
         [HttpGet(Routes.DeviceGetAll)]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = Roles.ADMIN + "," + Roles.NURSE)]
         public async Task<IActionResult> GetAllAsync()
@@ -79,11 +85,13 @@ namespace SmartDripper.WebAPI.Controllers
             
             if (User.IsInRole(Roles.ADMIN))
             {
+                //var response = mapper.Map<List<DeviceGetAllResponseAdmin>>(devices);
                 return Ok(devices);
             }
             
             if (User.IsInRole(Roles.NURSE))
             {
+                //var response = mapper.Map<List<DeviceGetAllResponseNurse>>(devices.Where(d => d.State == DeviceState.Inactive));
                 return Ok(devices.Where(d => d.State == DeviceState.Inactive));
             }
 
