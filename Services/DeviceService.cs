@@ -2,6 +2,7 @@
 using SmartDripper.WebAPI.Contracts.DTORequests;
 using SmartDripper.WebAPI.Contracts.DTOResponses;
 using SmartDripper.WebAPI.Data;
+using SmartDripper.WebAPI.Models.Users;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
@@ -25,6 +26,20 @@ namespace SmartDripper.WebAPI.Services
             string encodedToken = tokenService.EncodeJWTToken(token);
 
             return new DeviceResponse(user.State, user.IsTurnedOn, encodedToken, token.ValidTo);
+        }
+
+        public async Task DeleteAsync(Guid deviceId, Guid identityId)
+        {
+            Device device = await applicationContext.Devices.FindAsync(deviceId);
+            UserIdentity identity = await applicationContext.UserIdentities.FindAsync(identityId);
+
+            if (identity == null || device == null) throw new Exception("Cannot delete this device.");
+
+            applicationContext.Devices.Remove(device);
+            await applicationContext.SaveChangesAsync();
+
+            applicationContext.UserIdentities.Remove(identity);
+            await applicationContext.SaveChangesAsync();
         }
     }
 }

@@ -55,5 +55,20 @@ namespace SmartDripper.WebAPI.Controllers
                 return BadRequest(new BadRequestResponse(e.Message));
             }
         }
+
+        [HttpPost(Routes.DeviceDelete)]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = Roles.ADMIN)]
+        public async Task<IActionResult> Delete([FromBody] DeviceDeleteRequest request)
+        {          
+            try
+            {
+                await deviceService.DeleteAsync(request.deviceId, request.identityId);
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new BadRequestResponse(e.Message));
+            }
+        }
     }
 }
