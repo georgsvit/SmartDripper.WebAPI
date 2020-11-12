@@ -29,5 +29,6 @@ namespace SmartDripper.WebAPI.Contracts
 
         public const string DeviceReset = DeviceBase + "/{deviceId}/reset";
         public const string DeviceUpdate = DeviceBase + "/{deviceId}/update";
+        public const string DeviceGetConfiguration = DeviceBase + "/getconfig";
     }
 }
