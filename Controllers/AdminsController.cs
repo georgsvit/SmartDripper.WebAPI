@@ -25,7 +25,7 @@ namespace SmartDripper.WebAPI.Controllers
             this.adminService = adminService;
         }
 
-        [HttpPost(Routes.AdminLogin)]
+        [HttpPost(Routes.Admin.Login)]
         public async Task<IActionResult> Login(LoginRequest loginRequest)
         {
             try
@@ -38,7 +38,7 @@ namespace SmartDripper.WebAPI.Controllers
             }
         }
 
-        [HttpPost(Routes.AdminRegister)]
+        [HttpPost(Routes.Admin.Register)]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = Roles.ADMIN)]
         public async Task<IActionResult> Register([FromBody] DetailedRegistrationRequest request)
         {

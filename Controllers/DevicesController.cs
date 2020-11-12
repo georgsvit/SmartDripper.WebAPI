@@ -28,7 +28,7 @@ namespace SmartDripper.WebAPI.Controllers
             this.mapper = mapper;
         }
 
-        [HttpPost(Routes.DeviceLogin)]
+        [HttpPost(Routes.Device.Login)]
         public async Task<IActionResult> Login(LoginRequest loginRequest)
         {
             try
@@ -42,7 +42,7 @@ namespace SmartDripper.WebAPI.Controllers
             }
         }
 
-        [HttpPost(Routes.DeviceRegister)]
+        [HttpPost(Routes.Device.Register)]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = Roles.ADMIN)]
         public async Task<IActionResult> Register([FromBody] DetailedRegistrationRequest request)
         {
@@ -59,7 +59,7 @@ namespace SmartDripper.WebAPI.Controllers
             }
         }
 
-        [HttpPost(Routes.DeviceDelete)]
+        [HttpPost(Routes.Device.Delete)]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = Roles.ADMIN)]
         public async Task<IActionResult> Delete([FromBody] DeviceDeleteRequest request)
         {          
@@ -76,7 +76,7 @@ namespace SmartDripper.WebAPI.Controllers
 
         // TODO: Return device with all adjacent objects (now only device)
 
-        [HttpGet(Routes.DeviceGetAll)]
+        [HttpGet(Routes.Device.GetAll)]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = Roles.ADMIN + "," + Roles.NURSE)]
         public async Task<IActionResult> GetAllAsync()
         {
@@ -99,7 +99,7 @@ namespace SmartDripper.WebAPI.Controllers
 
         // TODO: Return device with all adjacent objects (now only device)
 
-        [HttpGet(Routes.DeviceGet)]
+        [HttpGet(Routes.Device.Get)]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = Roles.ADMIN + "," + Roles.NURSE)]
         public async Task<IActionResult> GetOneAsync([FromRoute] Guid deviceId)
         {
@@ -113,7 +113,7 @@ namespace SmartDripper.WebAPI.Controllers
             }
         }
 
-        [HttpPost(Routes.DeviceReset)]
+        [HttpPost(Routes.Device.Reset)]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = Roles.ADMIN + "," + Roles.NURSE)]
         public async Task<IActionResult> ResetAsync([FromRoute] Guid deviceId, [FromBody] DeviceResetRequest request)
         {
@@ -128,7 +128,7 @@ namespace SmartDripper.WebAPI.Controllers
             }
         }
 
-        [HttpPatch(Routes.DeviceUpdate)]
+        [HttpPatch(Routes.Device.Update)]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = Roles.ADMIN + "," + Roles.NURSE)]
         public async Task<IActionResult> UpdateAsync([FromRoute] Guid deviceId, [FromBody] DeviceUpdateRequest request)
         {
@@ -143,7 +143,7 @@ namespace SmartDripper.WebAPI.Controllers
             }
         }
 
-        [HttpGet(Routes.DeviceGetConfiguration)]
+        [HttpGet(Routes.Device.GetConfiguration)]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = Roles.DEVICE)]
         public async Task<IActionResult> GetConfigurationAsync()
         {

@@ -22,7 +22,7 @@ namespace SmartDripper.WebAPI.Controllers
             this.nurseService = nurseService;
         }
 
-        [HttpPost(Routes.NurseLogin)]
+        [HttpPost(Routes.Nurse.Login)]
         public async Task<IActionResult> Login(LoginRequest loginRequest)
         {
             try
@@ -36,7 +36,7 @@ namespace SmartDripper.WebAPI.Controllers
             }
         }
 
-        [HttpPost(Routes.NurseRegister)]
+        [HttpPost(Routes.Nurse.Register)]
         public async Task<IActionResult> Register([FromBody] DetailedRegistrationRequest request)
         {
             Nurse nurse = new Nurse(request.Login, request.Password, request.Name, request.Surname);

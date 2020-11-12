@@ -22,7 +22,7 @@ namespace SmartDripper.WebAPI.Controllers
             this.medicamentService = medicamentService;
         }
 
-        [HttpGet(Routes.MedicamentGetAll)]
+        [HttpGet(Routes.Medicament.GetAll)]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = Roles.ADMIN + "," + Roles.DOCTOR)]
         public async Task<IActionResult> GetAll()
         {
@@ -31,7 +31,7 @@ namespace SmartDripper.WebAPI.Controllers
             return Ok(list);
         }
 
-        [HttpGet(Routes.MedicamentGet)]
+        [HttpGet(Routes.Medicament.Get)]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = Roles.ADMIN + "," + Roles.DOCTOR)]
         public async Task<IActionResult> Get([FromRoute] Guid id)
         {
@@ -46,7 +46,7 @@ namespace SmartDripper.WebAPI.Controllers
             }
         }
 
-        [HttpPost(Routes.MedicamentCreate)]
+        [HttpPost(Routes.Medicament.Create)]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = Roles.ADMIN + "," + Roles.DOCTOR)]
         public async Task<IActionResult> Create([FromRoute] Guid id, [FromBody] MedicamentRequest request)
         {
@@ -61,7 +61,7 @@ namespace SmartDripper.WebAPI.Controllers
             }
         }
 
-        [HttpDelete(Routes.MedicamentDelete)]
+        [HttpDelete(Routes.Medicament.Delete)]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = Roles.ADMIN + "," + Roles.DOCTOR)]
         public async Task<IActionResult> Delete([FromRoute] Guid id)
         {
@@ -76,7 +76,7 @@ namespace SmartDripper.WebAPI.Controllers
             }
         }
 
-        [HttpPatch(Routes.MedicamentEdit)]
+        [HttpPatch(Routes.Medicament.Edit)]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = Roles.ADMIN + "," + Roles.DOCTOR)]
         public async Task<IActionResult> Edit([FromRoute] Guid id, [FromBody] MedicamentRequest request)
         {

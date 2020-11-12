@@ -7,34 +7,55 @@ namespace SmartDripper.WebAPI.Contracts
 {
     public static class Routes
     {
-        public const string AdminBase = "admins";
-        public const string AdminLogin = AdminBase + "/login";
-        public const string AdminRegister = AdminBase + "/register";
+        public static class Admin
+        {
+            public const string Base = "admins";
 
-        public const string NurseBase = "nurses";
-        public const string NurseLogin = NurseBase + "/login";
-        public const string NurseRegister = NurseBase + "/register";
+            public const string Login = Base + "/login";
+            public const string Register = Base + "/register";
+        }
 
-        public const string DoctorBase = "doctors";
-        public const string DoctorLogin = DoctorBase + "/login";
-        public const string DoctorRegister = DoctorBase + "/register";
+        public static class Nurse
+        {
+            public const string Base = "nurses";
 
-        public const string DeviceBase = "devices";
-        public const string DeviceGetAll = DeviceBase;
-        public const string DeviceGet = DeviceBase + "/{deviceId}";
-        public const string DeviceLogin = DeviceBase + "/login";
-        public const string DeviceRegister = DeviceBase + "/register";
-        public const string DeviceDelete = DeviceBase + "/delete";
-        public const string DeviceReset = DeviceBase + "/{deviceId}/reset";
-        public const string DeviceUpdate = DeviceBase + "/{deviceId}/update";
-        public const string DeviceGetConfiguration = DeviceBase + "/getconfig";
-
-        public const string MedicamentBase = "medicaments";
-        public const string MedicamentGetAll = MedicamentBase;
-        public const string MedicamentGet = MedicamentBase + "/{Id}";
-        public const string MedicamentDelete = MedicamentBase + "/delete/{Id}";
-        public const string MedicamentEdit = MedicamentBase + "/edit/{Id}";
-        public const string MedicamentCreate = MedicamentBase + "/create";
+            public const string Login = Base + "/login";
+            public const string Register = Base + "/register";
+        }
         
+        public static class Doctor
+        {
+            public const string Base = "doctors";
+
+            public const string Login = Base + "/login";
+            public const string Register = Base + "/register";
+        }
+
+        public static class Device
+        {
+            public const string Base = "devices";
+
+            public const string GetAll = Base;
+            public const string Get = Base + "/{deviceId}";
+            public const string Login = Base + "/login";
+            public const string Register = Base + "/register";
+            public const string Delete = Base + "/delete";
+            public const string Reset = Base + "/{deviceId}/reset";
+            public const string Update = Base + "/{deviceId}/update";
+            public const string GetConfiguration = Base + "/getconfig";
+
+        }
+
+        public static class Medicament
+        {
+            public const string Base = "medicaments";
+
+            public const string GetAll = Base;
+            public const string Get = Base + "/{Id}";
+            public const string Delete = Base + "/delete/{Id}";
+            public const string Edit = Base + "/edit/{Id}";
+            public const string Create = Base + "/create";
+
+        }
     }
 }
