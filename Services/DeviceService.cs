@@ -53,5 +53,23 @@ namespace SmartDripper.WebAPI.Services
                 .Include(d => d.Procedure)
                 .ThenInclude(p => p.Appointment).ThenInclude(a => a.Medicament).ThenInclude(m => m.MedicalProtocol).ThenInclude(mp => mp.Disease)
                 .ToListAsync();
+
+
+        public async Task<Device> GetOneAsync(Guid deviceId)
+        {
+            Device device = await applicationContext.Devices
+                .Include(d => d.UserIdentity)
+                .Include(d => d.Procedure)
+                .ThenInclude(p => p.Nurse)
+                .Include(d => d.Procedure)
+                .ThenInclude(p => p.Appointment).ThenInclude(a => a.Patient)
+                .Include(d => d.Procedure)
+                .ThenInclude(p => p.Appointment).ThenInclude(a => a.Medicament).ThenInclude(m => m.MedicalProtocol).ThenInclude(mp => mp.Disease)
+                .FirstOrDefaultAsync(d => d.Id == deviceId);
+
+            if (device == null) throw new Exception("Device with this identifier doesn`t exist");
+            return device;
+        }
+            
     }
 }

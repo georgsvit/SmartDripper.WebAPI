@@ -97,5 +97,19 @@ namespace SmartDripper.WebAPI.Controllers
 
             return BadRequest();
         }
+
+        [HttpGet(Routes.DeviceGet)]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = Roles.ADMIN + "," + Roles.NURSE)]
+        public async Task<IActionResult> GetOneAsync([FromBody] DeviceGetRequest request)
+        {
+            try
+            {
+                Device device = await deviceService.GetOneAsync(request.deviceId);
+                return Ok(device);
+            } catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
     }
 }
