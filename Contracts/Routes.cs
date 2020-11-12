@@ -21,9 +21,12 @@ namespace SmartDripper.WebAPI.Contracts
 
         public const string DeviceBase = "devices";
         public const string DeviceGetAll = DeviceBase;
-        public const string DeviceGet = DeviceBase + "/one";
+        public const string DeviceGet = DeviceBase + "/{deviceId}";
+
         public const string DeviceLogin = DeviceBase + "/login";
         public const string DeviceRegister = DeviceBase + "/register";
         public const string DeviceDelete = DeviceBase + "/delete";
+
+        public const string DeviceReset = DeviceBase + "/{deviceId}/reset";
     }
 }

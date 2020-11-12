@@ -98,15 +98,32 @@ namespace SmartDripper.WebAPI.Controllers
             return BadRequest();
         }
 
+        // TODO: Return device with all adjacent objects (now only device)
+
         [HttpGet(Routes.DeviceGet)]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = Roles.ADMIN + "," + Roles.NURSE)]
-        public async Task<IActionResult> GetOneAsync([FromBody] DeviceGetRequest request)
+        public async Task<IActionResult> GetOneAsync([FromRoute] Guid deviceId)
         {
             try
             {
-                Device device = await deviceService.GetOneAsync(request.deviceId);
+                Device device = await deviceService.GetOneAsync(deviceId);
                 return Ok(device);
             } catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpPost(Routes.DeviceReset)]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = Roles.ADMIN + "," + Roles.NURSE)]
+        public async Task<IActionResult> ResetAsync([FromRoute] Guid deviceId, [FromBody] DeviceResetRequest request)
+        {
+            try
+            {
+                await deviceService.ResetAsync(deviceId, request.NewPassword);
+                return Ok();
+            }
+            catch (Exception e)
             {
                 return BadRequest(e.Message);
             }

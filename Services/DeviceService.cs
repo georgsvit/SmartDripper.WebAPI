@@ -70,6 +70,25 @@ namespace SmartDripper.WebAPI.Services
             if (device == null) throw new Exception("Device with this identifier doesn`t exist");
             return device;
         }
-            
+         
+        
+        public async Task ResetAsync(Guid identityId, string newPassword)
+        {
+            var identity = await applicationContext.UserIdentities.FindAsync(identityId);
+            if (identity == null)
+            {
+                throw new Exception("The user with such id was not found.");
+            }
+
+            var smartDevice = await applicationContext.Devices.FindAsync(identity.Id);
+            if (smartDevice == null)
+            {
+                throw new Exception("The user with such id is not a smart device.");
+            }
+
+            string login = identity.Login;
+            await DeleteAsync(identity.Id, smartDevice.Id);
+            await RegisterAsync(new Device(login, newPassword));
+        }
     }
 }
