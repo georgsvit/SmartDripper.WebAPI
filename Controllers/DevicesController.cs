@@ -1,18 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SmartDripper.WebAPI.Contracts;
 using SmartDripper.WebAPI.Contracts.DTORequests;
 using SmartDripper.WebAPI.Contracts.DTOResponses;
 using SmartDripper.WebAPI.Models;
 using SmartDripper.WebAPI.Models.Users;
-using SmartDripper.WebAPI.Services;
+using SmartDripper.WebAPI.Services.Domain;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace SmartDripper.WebAPI.Controllers
 {
@@ -59,13 +58,13 @@ namespace SmartDripper.WebAPI.Controllers
             }
         }
 
-        [HttpPost(Routes.Device.Delete)]
+        [HttpDelete(Routes.Device.Delete)]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = Roles.ADMIN)]
-        public async Task<IActionResult> Delete([FromBody] DeviceDeleteRequest request)
-        {          
+        public async Task<IActionResult> Delete([FromRoute] Guid deviceId)
+        {
             try
             {
-                await deviceService.DeleteAsync(request.deviceId, request.identityId);
+                await deviceService.DeleteAsync(deviceId);
                 return Ok();
             }
             catch (Exception e)
@@ -81,13 +80,13 @@ namespace SmartDripper.WebAPI.Controllers
         public async Task<IActionResult> GetAllAsync()
         {
             List<Device> devices = await deviceService.GetAllDevicesAsync();
-            
+
             if (User.IsInRole(Roles.ADMIN))
             {
                 //var response = mapper.Map<List<DeviceGetAllResponseAdmin>>(devices);
                 return Ok(devices);
             }
-            
+
             if (User.IsInRole(Roles.NURSE))
             {
                 //var response = mapper.Map<List<DeviceGetAllResponseNurse>>(devices.Where(d => d.State == DeviceState.Inactive));
@@ -107,7 +106,8 @@ namespace SmartDripper.WebAPI.Controllers
             {
                 Device device = await deviceService.GetOneAsync(deviceId);
                 return Ok(device);
-            } catch (Exception e)
+            }
+            catch (Exception e)
             {
                 return BadRequest(e.Message);
             }

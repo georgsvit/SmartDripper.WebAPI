@@ -7,14 +7,13 @@ using SmartDripper.WebAPI.Models.Users;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Threading.Tasks;
 
-namespace SmartDripper.WebAPI.Services
+namespace SmartDripper.WebAPI.Services.Domain
 {
     public class DeviceService : GenericUserService
     {
-        public DeviceService(ApplicationContext applicationContext, JWTTokenService tokenService, IDataProtectionProvider provider) 
+        public DeviceService(ApplicationContext applicationContext, JWTTokenService tokenService, IDataProtectionProvider provider)
             : base(applicationContext, tokenService, provider) { }
 
         public async Task<DeviceResponse> LoginAsync(LoginRequest loginRequest)
@@ -29,7 +28,7 @@ namespace SmartDripper.WebAPI.Services
             return new DeviceResponse(user.State, user.IsTurnedOn, encodedToken, token.ValidTo);
         }
 
-        public async Task DeleteAsync(Guid deviceId, Guid identityId)
+        public async Task DeleteAsync(Guid deviceId)
         {
             Device device = await applicationContext.Devices.Include(d => d.UserIdentity).FirstOrDefaultAsync(d => d.Id == deviceId);
             UserIdentity identity = device.UserIdentity;
@@ -69,7 +68,7 @@ namespace SmartDripper.WebAPI.Services
             if (device == null) throw new Exception("Device with this identifier doesn`t exist.");
             return device;
         }
-                 
+
         public async Task ResetAsync(Guid identityId, string newPassword)
         {
             var identity = await applicationContext.UserIdentities.FindAsync(identityId);
@@ -85,7 +84,7 @@ namespace SmartDripper.WebAPI.Services
             }
 
             string login = identity.Login;
-            await DeleteAsync(identity.Id, smartDevice.Id);
+            await DeleteAsync(identity.Id);
             await RegisterAsync(new Device(login, newPassword));
         }
 

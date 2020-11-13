@@ -1,12 +1,8 @@
-﻿using Microsoft.AspNetCore.DataProtection;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SmartDripper.WebAPI.ServiceInstallations;
 using SmartDripper.WebAPI.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using SmartDripper.WebAPI.Services.Domain;
 
 namespace SmartDripper.WebAPI.ServiceInstallers.Installers
 {
@@ -26,7 +22,7 @@ namespace SmartDripper.WebAPI.ServiceInstallers.Installers
             services.AddTransient<ManufacturerService>();
             services.AddTransient<PatientService>();
             services.AddTransient<AppointmentService>();
-            services.AddTransient<ProcedureService>();    
+            services.AddTransient<ProcedureService>();
 
             //
             services.AddTransient<JWTTokenService>();

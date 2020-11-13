@@ -1,14 +1,12 @@
 ﻿using SmartDripper.WebAPI.Models;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace SmartDripper.WebAPI.Contracts.DTOResponses
 {
     public class DoctorResponse : JWTTokenResponse
     {
-        public DoctorResponse(string name, string surname, string role, List<Appointment> appointments, string token, DateTime expireDate) 
+        public DoctorResponse(string name, string surname, string role, List<Appointment> appointments, string token, DateTime expireDate)
             : base(token, expireDate)
         {
             Name = name;

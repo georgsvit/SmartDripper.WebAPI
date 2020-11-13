@@ -6,10 +6,9 @@ using SmartDripper.WebAPI.Data;
 using SmartDripper.WebAPI.Models.Users;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
-namespace SmartDripper.WebAPI.Services
+namespace SmartDripper.WebAPI.Services.Domain
 {
     public class PatientService
     {
@@ -26,7 +25,7 @@ namespace SmartDripper.WebAPI.Services
         {
             Patient patient = Protect(request);
 
-            var inBase = await applicationContext.Patients.FirstOrDefaultAsync(x => x.Name == patient.Name 
+            var inBase = await applicationContext.Patients.FirstOrDefaultAsync(x => x.Name == patient.Name
                                                                             && x.Surname == patient.Surname
                                                                             && x.DOB == patient.DOB);
 
@@ -36,7 +35,7 @@ namespace SmartDripper.WebAPI.Services
             await applicationContext.SaveChangesAsync();
         }
 
-        private PatientResponse Unprotect(Patient patient) => 
+        private PatientResponse Unprotect(Patient patient) =>
             new PatientResponse
             {
                 Id = patient.Id,
@@ -44,7 +43,7 @@ namespace SmartDripper.WebAPI.Services
                 Surname = protector.Unprotect(patient.Surname),
                 DOB = DateTime.Parse(protector.Unprotect(patient.DOB)),
                 Comment = protector.Unprotect(patient.Comment)
-            }; 
+            };
 
         private Patient Protect(PatientRequest request) =>
             new Patient(

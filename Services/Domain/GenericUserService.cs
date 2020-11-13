@@ -6,7 +6,7 @@ using SmartDripper.WebAPI.Models.Users;
 using System;
 using System.Threading.Tasks;
 
-namespace SmartDripper.WebAPI.Services
+namespace SmartDripper.WebAPI.Services.Domain
 {
     public abstract class GenericUserService
     {

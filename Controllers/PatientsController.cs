@@ -1,17 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SmartDripper.WebAPI.Contracts;
 using SmartDripper.WebAPI.Contracts.DTORequests;
 using SmartDripper.WebAPI.Contracts.DTOResponses;
 using SmartDripper.WebAPI.Models;
-using SmartDripper.WebAPI.Models.Users;
-using SmartDripper.WebAPI.Services;
+using SmartDripper.WebAPI.Services.Domain;
+using System;
+using System.Threading.Tasks;
 
 namespace SmartDripper.WebAPI.Controllers
 {

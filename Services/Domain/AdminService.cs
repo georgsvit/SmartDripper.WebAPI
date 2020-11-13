@@ -6,7 +6,7 @@ using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Threading.Tasks;
 
-namespace SmartDripper.WebAPI.Services
+namespace SmartDripper.WebAPI.Services.Domain
 {
     public class AdminService : GenericUserService
     {

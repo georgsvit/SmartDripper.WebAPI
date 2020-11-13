@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace SmartDripper.WebAPI.Contracts
+﻿namespace SmartDripper.WebAPI.Contracts
 {
     public static class Routes
     {
@@ -22,7 +17,7 @@ namespace SmartDripper.WebAPI.Contracts
             public const string Login = Base + "/login";
             public const string Register = Base + "/register";
         }
-        
+
         public static class Doctor
         {
             public const string Base = "doctors";
@@ -39,7 +34,7 @@ namespace SmartDripper.WebAPI.Contracts
             public const string Get = Base + "/{deviceId}";
             public const string Login = Base + "/login";
             public const string Register = Base + "/register";
-            public const string Delete = Base + "/delete";
+            public const string Delete = Base + "/delete/{deviceId}";
             public const string Reset = Base + "/{deviceId}/reset";
             public const string Update = Base + "/{deviceId}/update";
             public const string GetConfiguration = Base + "/getconfig";

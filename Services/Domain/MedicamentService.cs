@@ -5,10 +5,9 @@ using SmartDripper.WebAPI.Data;
 using SmartDripper.WebAPI.Models;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
-namespace SmartDripper.WebAPI.Services
+namespace SmartDripper.WebAPI.Services.Domain
 {
     public class MedicamentService
     {
@@ -39,7 +38,7 @@ namespace SmartDripper.WebAPI.Services
 
         // TODO: Get all adjacent data
         public async Task<Medicament> GetAsync(Guid id)
-        {          
+        {
             Medicament medicament = await applicationContext.Medicaments.AsNoTracking().SingleOrDefaultAsync(x => x.Id == id);
 
             if (medicament == null) throw new Exception("Medicament with this identifier doesn`t exist.");
@@ -63,7 +62,7 @@ namespace SmartDripper.WebAPI.Services
             Medicament medicament = await GetAsync(id);
 
             if (medicament == null) throw new Exception("Medicament with this identifier doesn`t exist.");
-            
+
             medicament = newMedicament;
             medicament.Id = id;
 
