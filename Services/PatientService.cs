@@ -26,9 +26,9 @@ namespace SmartDripper.WebAPI.Services
         {
             Patient patient = Protect(request);
 
-            var inBase = await applicationContext.Patients.FirstOrDefaultAsync(x => x.Name == protector.Protect(request.Name) 
-                                                                            && x.Surname == protector.Protect(request.Surname)
-                                                                            && x.DOB == protector.Protect(patient.DOB));
+            var inBase = await applicationContext.Patients.FirstOrDefaultAsync(x => x.Name == patient.Name 
+                                                                            && x.Surname == patient.Surname
+                                                                            && x.DOB == patient.DOB);
 
             if (inBase != null) throw new Exception("Patient already exists.");
 
