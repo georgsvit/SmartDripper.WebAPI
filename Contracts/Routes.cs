@@ -89,5 +89,16 @@ namespace SmartDripper.WebAPI.Contracts
             public const string Edit = Base + "/edit/{Id}";
             public const string Create = Base + "/create";
         }
+
+        public static class Patient
+        {
+            public const string Base = "patients";
+
+            public const string GetAll = Base;
+            public const string Get = Base + "/{Id}";
+            public const string Delete = Base + "/delete/{Id}";
+            public const string Edit = Base + "/edit/{Id}";
+            public const string Create = Base + "/create";
+        }
     }
 }
