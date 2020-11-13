@@ -103,7 +103,7 @@ namespace SmartDripper.WebAPI.Services.Domain
             patient.Id = id;
 
             applicationContext.Patients.Update(patient);
-            applicationContext.SaveChanges();
+            await applicationContext.SaveChangesAsync();
 
             return await GetPatientResponseAsync(patient.Id);
         }

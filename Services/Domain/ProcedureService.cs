@@ -63,7 +63,7 @@ namespace SmartDripper.WebAPI.Services.Domain
             procedure.Id = id;
 
             applicationContext.Procedures.Update(procedure);
-            applicationContext.SaveChanges();
+            await applicationContext.SaveChangesAsync();
 
             return await GetAsync(procedure.Id);
         }

@@ -67,7 +67,7 @@ namespace SmartDripper.WebAPI.Services.Domain
             manufacturer.Id = id;
 
             applicationContext.Manufacturers.Update(manufacturer);
-            applicationContext.SaveChanges();
+            await applicationContext.SaveChangesAsync();
 
             return await GetAsync(manufacturer.Id);
         }

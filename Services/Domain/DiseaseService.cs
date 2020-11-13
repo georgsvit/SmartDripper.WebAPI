@@ -67,7 +67,7 @@ namespace SmartDripper.WebAPI.Services.Domain
             disease.Id = id;
 
             applicationContext.Diseases.Update(disease);
-            applicationContext.SaveChanges();
+            await applicationContext.SaveChangesAsync();
 
             return await GetAsync(disease.Id);
         }
