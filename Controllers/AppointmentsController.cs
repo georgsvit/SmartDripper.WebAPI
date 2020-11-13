@@ -30,7 +30,7 @@ namespace SmartDripper.WebAPI.Controllers
         }
 
         [HttpGet(Routes.Appointment.Get)]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = Roles.ADMIN)]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = Roles.ADMIN + "," + Roles.DOCTOR)]
         public async Task<IActionResult> Get([FromRoute] Guid id)
         {
             try
@@ -45,7 +45,7 @@ namespace SmartDripper.WebAPI.Controllers
         }
 
         [HttpPost(Routes.Appointment.Create)]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = Roles.ADMIN)]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = Roles.ADMIN + "," + Roles.DOCTOR)]
         public async Task<IActionResult> Create([FromBody] AppointmentRequest request)
         {
             try
@@ -60,7 +60,7 @@ namespace SmartDripper.WebAPI.Controllers
         }
 
         [HttpDelete(Routes.Appointment.Delete)]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = Roles.ADMIN)]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = Roles.ADMIN + "," + Roles.DOCTOR)]
         public async Task<IActionResult> Delete([FromRoute] Guid id)
         {
             try
