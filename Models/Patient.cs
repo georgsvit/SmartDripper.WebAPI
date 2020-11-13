@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace SmartDripper.WebAPI.Models.Users
 {
@@ -13,7 +15,6 @@ namespace SmartDripper.WebAPI.Models.Users
             Surname = surname;
             DOB = dOB;
             Comment = comment;
-            PatientCard = new List<PatientsLogNote>();
             Appointments = new List<Appointment>();
             Id = Guid.NewGuid();
         }
@@ -25,7 +26,9 @@ namespace SmartDripper.WebAPI.Models.Users
         public string Comment { get; set; }
 
         //
-        public List<PatientsLogNote> PatientCard { get; set; }
         public List<Appointment> Appointments { get; set; }
+
+        public List<Appointment> GetPatientCard() =>
+            Appointments.Where(a => a.IsDone).ToList();
     }
 }

@@ -88,5 +88,20 @@ namespace SmartDripper.WebAPI.Controllers
                 return BadRequest(e.Message);
             }
         }
+
+        [HttpPost(Routes.Appointment.Done)]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = Roles.ADMIN + "," + Roles.DOCTOR)]
+        public async Task<IActionResult> Done([FromRoute] Guid id)
+        {
+            try
+            {
+                await appointmentService.SetDoneAsync(id);
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
     }
 }

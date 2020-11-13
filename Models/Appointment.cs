@@ -13,6 +13,7 @@ namespace SmartDripper.WebAPI.Models
             MedicamentId = medicamentId;
             PatientId = patientId;
             DoctorId = doctorId;
+            Date = DateTime.Now;
             IsDone = false;
         }
 
@@ -20,11 +21,18 @@ namespace SmartDripper.WebAPI.Models
         public Guid? MedicamentId { get; set; }
         public Guid? PatientId { get; set; }
         public Guid? DoctorId { get; set; }
+        public DateTime Date { get; set; }
         public bool IsDone { get; set; }
 
         //
         public Doctor Doctor { get; set; }
         public Medicament Medicament { get; set; }
         public Patient Patient { get; set; }
+
+        public void SetDone()
+        {
+            IsDone = true;
+            Date = DateTime.Now;
+        }
     }
 }

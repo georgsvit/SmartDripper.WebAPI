@@ -29,7 +29,6 @@ namespace SmartDripper.WebAPI.Data
         public DbSet<MedicamentLogNote> MedicamentLogNotes { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<Patient> Patients { get; set; }
-        public DbSet<PatientsLogNote> PatientsLogNotes { get; set; }
         public DbSet<Procedure> Procedures { get; set; }
     }
 }

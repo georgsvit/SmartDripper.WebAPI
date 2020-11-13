@@ -105,6 +105,7 @@
             public const string Delete = Base + "/delete/{Id}";
             public const string Edit = Base + "/edit/{Id}";
             public const string Create = Base + "/create";
+            public const string Done = Base + "/done/{Id}";
         }
 
         public static class Procedure

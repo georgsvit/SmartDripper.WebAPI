@@ -63,9 +63,21 @@ namespace SmartDripper.WebAPI.Services.Domain
             appointment.Id = id;
 
             applicationContext.Appointments.Update(appointment);
-            applicationContext.SaveChanges();
+            await applicationContext.SaveChangesAsync();
 
             return await GetAsync(appointment.Id);
+        }
+
+        public async Task SetDoneAsync(Guid id)
+        {
+            Appointment appointment = await GetAsync(id);
+
+            if (appointment == null) throw new Exception("Appointment with this identifier doesn`t exist.");
+
+            appointment.SetDone();
+            
+            applicationContext.Appointments.Update(appointment);
+            await applicationContext.SaveChangesAsync();
         }
     }
 }
