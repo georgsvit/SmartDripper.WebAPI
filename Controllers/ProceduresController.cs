@@ -15,11 +15,13 @@ namespace SmartDripper.WebAPI.Controllers
     {
         private readonly ProcedureService procedureService;
         private readonly OrderService orderService;
+        private readonly MedicamentLogNoteService noteService;
 
-        public ProceduresController(ProcedureService procedureService, OrderService orderService)
+        public ProceduresController(ProcedureService procedureService, OrderService orderService, MedicamentLogNoteService noteService)
         {
             this.procedureService = procedureService;
             this.orderService = orderService;
+            this.noteService = noteService;
         }
 
         [HttpGet(Routes.Procedure.GetAll)]
@@ -56,6 +58,8 @@ namespace SmartDripper.WebAPI.Controllers
                 var procedure = await procedureService.GetProcedureByAppointmentId((Guid)request.AppointmentId);
 
                 await orderService.AddOrder((Guid)procedure.Appointment.MedicamentId, 1);
+                await noteService.AddNote((Guid)procedure.Appointment.MedicamentId);
+
                 return Ok();
             }
             catch (Exception e)

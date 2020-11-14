@@ -24,6 +24,7 @@ namespace SmartDripper.WebAPI.ServiceInstallers.Installers
             services.AddTransient<AppointmentService>();
             services.AddTransient<ProcedureService>();
             services.AddTransient<OrderService>();
+            services.AddTransient<MedicamentLogNoteService>();
 
             //
             services.AddTransient<JWTTokenService>();
