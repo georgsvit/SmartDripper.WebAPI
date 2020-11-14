@@ -24,6 +24,10 @@ namespace SmartDripper.WebAPI.Services.Domain
         {
             Procedure procedure = new Procedure((Guid)request.NurseId, (Guid)request.DeviceId, (Guid)request.AppointmentId);
 
+            Procedure isInBase = await applicationContext.Procedures.FirstOrDefaultAsync(p => p.AppointmentId == procedure.AppointmentId);
+
+            if (isInBase != null) throw new Exception("Procedure already exists.");         
+
             await applicationContext.Procedures.AddAsync(procedure);
             await applicationContext.SaveChangesAsync();
         }
@@ -66,6 +70,15 @@ namespace SmartDripper.WebAPI.Services.Domain
             await applicationContext.SaveChangesAsync();
 
             return await GetAsync(procedure.Id);
+        }
+
+        public async Task<Procedure> GetProcedureByAppointmentId(Guid appointmentId)
+        {            
+            var procedure = await applicationContext.Procedures.Include(p => p.Appointment).FirstOrDefaultAsync(p => p.AppointmentId == appointmentId);
+
+            if (procedure == null) throw new Exception("Procedure with this identifier doesn`t exist.");
+
+            return procedure;
         }
     }
 }
