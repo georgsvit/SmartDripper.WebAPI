@@ -1,4 +1,5 @@
-﻿using SmartDripper.WebAPI.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using SmartDripper.WebAPI.Data;
 using SmartDripper.WebAPI.Models;
 using System;
 using System.Collections.Generic;
@@ -18,9 +19,17 @@ namespace SmartDripper.WebAPI.Services.Domain
 
         public async Task AddOrder(Guid medicamentId, int count)
         {
-            var order = new Order(medicamentId, count);
+            var medicament = await applicationContext.Medicaments.SingleOrDefaultAsync(x => x.Id == medicamentId);
 
-            await applicationContext.Orders.AddAsync(order);
+            medicament.Lack += count;
+
+            if (medicament.Lack + count >= medicament.AmountInPack)
+            {
+                medicament.Lack %= medicament.AmountInPack;
+                var order = new Order(medicamentId, count);
+                await applicationContext.Orders.AddAsync(order);
+            }
+           
             await applicationContext.SaveChangesAsync();
         } 
     }

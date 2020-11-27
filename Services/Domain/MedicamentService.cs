@@ -25,7 +25,7 @@ namespace SmartDripper.WebAPI.Services.Domain
 
         public async Task CreateAsync(MedicamentRequest request)
         {
-            Medicament medicament = new Medicament(request.Title, request.Description, request.ManufacturerId, request.MedicalProtocolId);
+            Medicament medicament = new Medicament(request.Title, request.Description, request.AmountInPack, request.ManufacturerId, request.MedicalProtocolId);
 
             var inBase = await applicationContext.Medicaments.FirstOrDefaultAsync(x => x.Title == request.Title && x.Description == request.Description);
 
@@ -61,7 +61,7 @@ namespace SmartDripper.WebAPI.Services.Domain
 
         public async Task<Medicament> EditAsync(Guid id, MedicamentRequest request)
         {
-            Medicament newMedicament = new Medicament(request.Title, request.Description, request.ManufacturerId, request.MedicalProtocolId);
+            Medicament newMedicament = new Medicament(request.Title, request.Description, request.AmountInPack, request.ManufacturerId, request.MedicalProtocolId);
             Medicament medicament = await GetAsync(id);
 
             if (medicament == null) throw new Exception(localizer["Medicament with this identifier doesn`t exist."]);

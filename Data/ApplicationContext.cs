@@ -13,7 +13,7 @@ namespace SmartDripper.WebAPI.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Device>().HasOne(d => d.Procedure).WithOne(p => p.Device).HasForeignKey<Procedure>(p => p.DeviceId);
-            AddDefaultAppAdmin(modelBuilder);
+            //AddDefaultAppAdmin(modelBuilder);
         }
 
         private void AddDefaultAppAdmin(ModelBuilder builder)
