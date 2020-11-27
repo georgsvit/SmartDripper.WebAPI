@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.DataProtection;
+using Microsoft.Extensions.Localization;
 using SmartDripper.WebAPI.Contracts.DTORequests;
 using SmartDripper.WebAPI.Contracts.DTOResponses;
 using SmartDripper.WebAPI.Data;
@@ -10,14 +11,14 @@ namespace SmartDripper.WebAPI.Services.Domain
 {
     public class NurseService : GenericUserService
     {
-        public NurseService(ApplicationContext applicationContext, JWTTokenService tokenService, IDataProtectionProvider provider)
-            : base(applicationContext, tokenService, provider) { }
+        public NurseService(ApplicationContext applicationContext, JWTTokenService tokenService, IDataProtectionProvider provider, IStringLocalizer localizer)
+            : base(applicationContext, tokenService, provider, localizer) { }
 
         public async Task<NurseResponse> LoginAsync(LoginRequest loginRequest)
         {
             var identity = await GetIdentityAsync(loginRequest);
             var user = await applicationContext.Nurses.FindAsync(identity.Id);
-            if (user == null) throw new Exception("Login failed. The user is not a nurse.");
+            if (user == null) throw new Exception(localizer["Login failed. The user is not a nurse."]);
 
             JwtSecurityToken token = tokenService.CreateJWTToken(identity);
             string encodedToken = tokenService.EncodeJWTToken(token);

@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Localization;
 using SmartDripper.WebAPI.ServiceInstallations;
 using SmartDripper.WebAPI.Services;
 using SmartDripper.WebAPI.Services.Domain;
@@ -28,6 +29,7 @@ namespace SmartDripper.WebAPI.ServiceInstallers.Installers
 
             //
             services.AddTransient<JWTTokenService>();
+            services.AddTransient<IStringLocalizer, LocalizationService>();
         }
     }
 }

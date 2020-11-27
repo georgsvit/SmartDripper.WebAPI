@@ -10,6 +10,7 @@ namespace SmartDripper.WebAPI.ServiceInstallers.Installers
         public void InstallServices(IServiceCollection services, IConfiguration configuration)
         {
             services.Configure<JWTOptions>(configuration.GetSection(JWTOptions.SectionName));
+            services.Configure<CultureOptions>(configuration.GetSection(CultureOptions.SectionName));
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.DataProtection;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Localization;
 using SmartDripper.WebAPI.Contracts.DTORequests;
 using SmartDripper.WebAPI.Data;
 using SmartDripper.WebAPI.Models;
@@ -13,11 +14,13 @@ namespace SmartDripper.WebAPI.Services.Domain
     {
         private readonly ApplicationContext applicationContext;
         private readonly IDataProtector protector;
+        private readonly IStringLocalizer localizer;
 
-        public MedicalProtocolService(ApplicationContext applicationContext, IDataProtectionProvider provider)
+        public MedicalProtocolService(ApplicationContext applicationContext, IDataProtectionProvider provider, IStringLocalizer localizer)
         {
             this.applicationContext = applicationContext;
             protector = provider.CreateProtector("MedicalProtocolService");
+            this.localizer = localizer;
         }
 
         public async Task CreateAsync(MedicalProtocolRequest request)
@@ -26,7 +29,7 @@ namespace SmartDripper.WebAPI.Services.Domain
 
             var inBase = await applicationContext.MedicalProtocols.FirstOrDefaultAsync(x => x.Title == request.Title);
 
-            if (inBase != null) throw new Exception("MedicalProtocol already exists.");
+            if (inBase != null) throw new Exception(localizer["MedicalProtocol already exists."]);
 
             await applicationContext.MedicalProtocols.AddAsync(medicalProtocol);
             await applicationContext.SaveChangesAsync();
@@ -41,7 +44,7 @@ namespace SmartDripper.WebAPI.Services.Domain
         {
             MedicalProtocol medicalProtocol = await applicationContext.MedicalProtocols.AsNoTracking().SingleOrDefaultAsync(x => x.Id == id);
 
-            if (medicalProtocol == null) throw new Exception("MedicalProtocol with this identifier doesn`t exist.");
+            if (medicalProtocol == null) throw new Exception(localizer["MedicalProtocol with this identifier doesn`t exist."]);
 
             return medicalProtocol;
         }
@@ -50,7 +53,7 @@ namespace SmartDripper.WebAPI.Services.Domain
         {
             MedicalProtocol medicalProtocol = applicationContext.MedicalProtocols.Find(id);
 
-            if (medicalProtocol == null) throw new Exception("MedicalProtocol with this identifier doesn`t exist.");
+            if (medicalProtocol == null) throw new Exception(localizer["MedicalProtocol with this identifier doesn`t exist."]);
 
             applicationContext.MedicalProtocols.Remove(medicalProtocol);
             await applicationContext.SaveChangesAsync();
@@ -61,7 +64,7 @@ namespace SmartDripper.WebAPI.Services.Domain
             MedicalProtocol newMedicalProtocol = new MedicalProtocol((Guid)request.DiseaseId, request.Title, request.Description, request.MaxTemp, request.MinTemp, request.MaxPulse, request.MinPulse, request.MaxBloodPressure, request.MinBloodPressure);
             MedicalProtocol medicalProtocol = await GetAsync(id);
 
-            if (medicalProtocol == null) throw new Exception("MedicalProtocol with this identifier doesn`t exist.");
+            if (medicalProtocol == null) throw new Exception(localizer["MedicalProtocol with this identifier doesn`t exist."]);
 
             medicalProtocol = newMedicalProtocol;
             medicalProtocol.Id = id;

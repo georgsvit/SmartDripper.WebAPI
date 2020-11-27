@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.DataProtection;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Localization;
 using SmartDripper.WebAPI.Contracts.DTORequests;
 using SmartDripper.WebAPI.Data;
 using SmartDripper.WebAPI.Models;
@@ -13,11 +14,13 @@ namespace SmartDripper.WebAPI.Services.Domain
     {
         private readonly ApplicationContext applicationContext;
         private readonly IDataProtector protector;
+        private readonly IStringLocalizer localizer;
 
-        public MedicamentService(ApplicationContext applicationContext, IDataProtectionProvider provider)
+        public MedicamentService(ApplicationContext applicationContext, IDataProtectionProvider provider, IStringLocalizer localizer)
         {
             this.applicationContext = applicationContext;
             protector = provider.CreateProtector("MedicamentService");
+            this.localizer = localizer;
         }
 
         public async Task CreateAsync(MedicamentRequest request)
@@ -26,7 +29,7 @@ namespace SmartDripper.WebAPI.Services.Domain
 
             var inBase = await applicationContext.Medicaments.FirstOrDefaultAsync(x => x.Title == request.Title && x.Description == request.Description);
 
-            if (inBase != null) throw new Exception("Medicament already exists.");
+            if (inBase != null) throw new Exception(localizer["Medicament already exists."]);
 
             await applicationContext.Medicaments.AddAsync(medicament);
             await applicationContext.SaveChangesAsync();
@@ -41,7 +44,7 @@ namespace SmartDripper.WebAPI.Services.Domain
         {
             Medicament medicament = await applicationContext.Medicaments.AsNoTracking().SingleOrDefaultAsync(x => x.Id == id);
 
-            if (medicament == null) throw new Exception("Medicament with this identifier doesn`t exist.");
+            if (medicament == null) throw new Exception(localizer["Medicament with this identifier doesn`t exist."]);
 
             return medicament;
         }
@@ -50,7 +53,7 @@ namespace SmartDripper.WebAPI.Services.Domain
         {
             Medicament medicament = applicationContext.Medicaments.Find(id);
 
-            if (medicament == null) throw new Exception("Medicament with this identifier doesn`t exist.");
+            if (medicament == null) throw new Exception(localizer["Medicament with this identifier doesn`t exist."]);
 
             applicationContext.Medicaments.Remove(medicament);
             await applicationContext.SaveChangesAsync();
@@ -61,7 +64,7 @@ namespace SmartDripper.WebAPI.Services.Domain
             Medicament newMedicament = new Medicament(request.Title, request.Description, request.ManufacturerId, request.MedicalProtocolId);
             Medicament medicament = await GetAsync(id);
 
-            if (medicament == null) throw new Exception("Medicament with this identifier doesn`t exist.");
+            if (medicament == null) throw new Exception(localizer["Medicament with this identifier doesn`t exist."]);
 
             medicament = newMedicament;
             medicament.Id = id;

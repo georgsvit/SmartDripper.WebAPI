@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.DataProtection;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Localization;
 using SmartDripper.WebAPI.Contracts.DTORequests;
 using SmartDripper.WebAPI.Contracts.DTOResponses;
 using SmartDripper.WebAPI.Data;
@@ -14,11 +15,13 @@ namespace SmartDripper.WebAPI.Services.Domain
     {
         private readonly ApplicationContext applicationContext;
         private readonly IDataProtector protector;
+        private readonly IStringLocalizer localizer;
 
-        public PatientService(ApplicationContext applicationContext, IDataProtectionProvider provider)
+        public PatientService(ApplicationContext applicationContext, IDataProtectionProvider provider, IStringLocalizer localizer)
         {
             this.applicationContext = applicationContext;
             protector = provider.CreateProtector("PatientService");
+            this.localizer = localizer;
         }
 
         public async Task CreateAsync(PatientRequest request)
@@ -29,7 +32,7 @@ namespace SmartDripper.WebAPI.Services.Domain
                                                                             && x.Surname == patient.Surname
                                                                             && x.DOB == patient.DOB);
 
-            if (inBase != null) throw new Exception("Patient already exists.");
+            if (inBase != null) throw new Exception(localizer["Patient already exists."]);
 
             await applicationContext.Patients.AddAsync(patient);
             await applicationContext.SaveChangesAsync();
@@ -67,7 +70,7 @@ namespace SmartDripper.WebAPI.Services.Domain
         {
             Patient patient = await applicationContext.Patients.AsNoTracking().SingleOrDefaultAsync(x => x.Id == id);
 
-            if (patient == null) throw new Exception("Patient with this identifier doesn`t exist.");
+            if (patient == null) throw new Exception(localizer["Patient with this identifier doesn`t exist."]);
 
             return Unprotect(patient);
         }
@@ -77,7 +80,7 @@ namespace SmartDripper.WebAPI.Services.Domain
         {
             Patient patient = await applicationContext.Patients.AsNoTracking().SingleOrDefaultAsync(x => x.Id == id);
 
-            if (patient == null) throw new Exception("Patient with this identifier doesn`t exist.");
+            if (patient == null) throw new Exception(localizer["Patient with this identifier doesn`t exist."]);
 
             return patient;
         }
@@ -86,7 +89,7 @@ namespace SmartDripper.WebAPI.Services.Domain
         {
             Patient patient = applicationContext.Patients.Find(id);
 
-            if (patient == null) throw new Exception("Patient with this identifier doesn`t exist.");
+            if (patient == null) throw new Exception(localizer["Patient with this identifier doesn`t exist."]);
 
             applicationContext.Patients.Remove(patient);
             await applicationContext.SaveChangesAsync();
@@ -97,7 +100,7 @@ namespace SmartDripper.WebAPI.Services.Domain
             Patient newPatient = Protect(request);
             Patient patient = await GetAsync(id);
 
-            if (patient == null) throw new Exception("Patient with this identifier doesn`t exist.");
+            if (patient == null) throw new Exception(localizer["Patient with this identifier doesn`t exist."]);
 
             patient = newPatient;
             patient.Id = id;

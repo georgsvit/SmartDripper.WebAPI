@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.DataProtection;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Localization;
 using SmartDripper.WebAPI.Contracts.DTORequests;
 using SmartDripper.WebAPI.Data;
 using SmartDripper.WebAPI.Models.Users;
@@ -13,19 +14,21 @@ namespace SmartDripper.WebAPI.Services.Domain
         protected readonly ApplicationContext applicationContext;
         protected readonly JWTTokenService tokenService;
         protected readonly IDataProtector dataProtector;
+        protected readonly IStringLocalizer localizer;
 
-        protected GenericUserService(ApplicationContext applicationContext, JWTTokenService tokenService, IDataProtectionProvider provider)
+        protected GenericUserService(ApplicationContext applicationContext, JWTTokenService tokenService, IDataProtectionProvider provider, IStringLocalizer localizer)
         {
             this.applicationContext = applicationContext;
             this.tokenService = tokenService;
             this.dataProtector = provider.CreateProtector("GenericUserService");
+            this.localizer = localizer;
         }
 
         public async Task RegisterAsync<TUser>(TUser user) where TUser : User
         {
             if (await IsRegisteredAsync(user))
             {
-                throw new Exception("The user with such login is already registered.");
+                throw new Exception(localizer["The user with such login is already registered."]);
             }
 
             ProtectPassword(user);
@@ -37,11 +40,11 @@ namespace SmartDripper.WebAPI.Services.Domain
         {
             var identity = await GetIdentityByLoginAsync(request.Login);
 
-            if (identity == null) throw new Exception("The user with such login doesn`t exist.");
+            if (identity == null) throw new Exception(localizer["The user with such login doesn`t exist."]);
 
             var invalidPassword = dataProtector.Unprotect(identity.Password) != request.Password;
 
-            if (invalidPassword) throw new Exception("The password inn`t correct");
+            if (invalidPassword) throw new Exception(localizer["The password isn`t correct."]);
 
             return identity;
         }
