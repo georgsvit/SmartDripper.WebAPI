@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using SmartDripper.WebAPI.Extensions;
+using SmartDripper.WebAPI.Hubs;
 using SmartDripper.WebAPI.Options;
 using System.Globalization;
 using System.Linq;
@@ -59,6 +60,7 @@ namespace SmartDripper.WebAPI
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHub<DeviceHub>("/devicehub");
             });
         }
 

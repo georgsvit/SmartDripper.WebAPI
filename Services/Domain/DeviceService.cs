@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 using SmartDripper.WebAPI.Contracts.DTORequests;
+using SmartDripper.WebAPI.Contracts.DTORequests.Device;
 using SmartDripper.WebAPI.Contracts.DTOResponses;
 using SmartDripper.WebAPI.Data;
 using SmartDripper.WebAPI.Models.Users;
@@ -14,8 +15,15 @@ namespace SmartDripper.WebAPI.Services.Domain
 {
     public class DeviceService : GenericUserService
     {
-        public DeviceService(ApplicationContext applicationContext, JWTTokenService tokenService, IDataProtectionProvider provider, IStringLocalizer localizer)
-            : base(applicationContext, tokenService, provider, localizer) { }
+        private readonly DeviceHubService deviceHubService;
+        private readonly IDataProtector protector;
+
+        public DeviceService(ApplicationContext applicationContext, JWTTokenService tokenService, IDataProtectionProvider provider, IStringLocalizer localizer, DeviceHubService deviceHubService)
+            : base(applicationContext, tokenService, provider, localizer) 
+        {
+            this.deviceHubService = deviceHubService;
+            protector = provider.CreateProtector("DeviceService");
+        }
 
         public async Task<DeviceResponse> LoginAsync(LoginRequest loginRequest)
         {
@@ -98,7 +106,44 @@ namespace SmartDripper.WebAPI.Services.Domain
             if (request.ProcedureId != null) device.Procedure = await applicationContext.Procedures.FindAsync(request.ProcedureId);
 
             await applicationContext.SaveChangesAsync();
-            // TODO: Send message to iot
+
+            await deviceHubService.SendUpdateMessageAsync(deviceId);
+        }
+
+        public async Task ActivateAsync(DeviceActivateRequest activateRequest)
+        {
+            LoginRequest loginRequest = new LoginRequest()
+            {
+                Login = activateRequest.SerialNumber,
+                Password = activateRequest.DefaultPassword
+            };
+            Device device = await GetDeviceByLoginPassword(loginRequest);
+            if (device.State != DeviceState.Inactive)
+            {
+                throw new Exception(localizer["The smart device cannot be activated."]);
+            }
+
+            bool smartDeviceReceivedMessage = await deviceHubService.TrySendActivateMessageAsync(
+                device.Id, activateRequest.NewPassword);
+            if (!smartDeviceReceivedMessage)
+            {
+                throw new Exception(localizer["The smart device is not connected to the service."]);
+            }
+
+            device.Activate(protector.Protect(activateRequest.NewPassword));
+            await applicationContext.SaveChangesAsync();
+        }
+
+        private async Task<Device> GetDeviceByLoginPassword(LoginRequest loginRequest)
+        {
+            var identity = await GetIdentityAsync(loginRequest);
+
+            var smartDevice = await applicationContext.Devices.FindAsync(identity.Id);
+            if (smartDevice == null)
+            {
+                throw new Exception(localizer["The user with such id is not a smart device."]);
+            }
+            return smartDevice;
         }
     }
 }

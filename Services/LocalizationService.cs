@@ -102,6 +102,9 @@ namespace SmartDripper.WebAPI.Services
             dictionary.Add("Patient with this identifier doesn`t exist.", "Patient with this identifier doesn`t exist.");
             dictionary.Add("Procedure already exists.", "Procedure already exists.");
             dictionary.Add("Procedure with this identifier doesn`t exist.", "Procedure with this identifier doesn`t exist.");
+            
+            dictionary.Add("The smart device cannot be activated.", "The smart device cannot be activated.");
+            dictionary.Add("The smart device is not connected to the service.", "The smart device is not connected to the service.");
             //dictionary.Add("", "");
             
             return dictionary;
@@ -140,6 +143,9 @@ namespace SmartDripper.WebAPI.Services
             dictionary.Add("Patient with this identifier doesn`t exist.", "Пацієнт з таким ідентифікатором не існує.");
             dictionary.Add("Procedure already exists.", "Така процедура вже існує.");
             dictionary.Add("Procedure with this identifier doesn`t exist.", "Процедура з таким ідентифікатором не існує.");
+            
+            dictionary.Add("The smart device cannot be activated.", "Смарт-пристрій не може бути активовано.");
+            dictionary.Add("The smart device is not connected to the service.", "Пристрій не підключено до сервісу.");
             //dictionary.Add("", "");
             
             return dictionary;
