@@ -118,5 +118,13 @@
             public const string Edit = Base + "/edit/{Id}";
             public const string Create = Base + "/create";
         }
+
+        public static class Data
+        {
+            public const string Base = "data";
+
+            public const string Import = Base;
+            public const string Export = Base;
+        }
     }
 }

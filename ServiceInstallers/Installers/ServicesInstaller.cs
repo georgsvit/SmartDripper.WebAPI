@@ -30,6 +30,7 @@ namespace SmartDripper.WebAPI.ServiceInstallers.Installers
             //
             services.AddTransient<JWTTokenService>();
             services.AddTransient<IStringLocalizer, LocalizationService>();
+            services.AddTransient<DataService>();
         }
     }
 }
