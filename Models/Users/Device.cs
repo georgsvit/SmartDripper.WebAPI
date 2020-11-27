@@ -22,5 +22,11 @@
         public Procedure Procedure { get; set; }
         public DeviceState State { get; set; }
         public bool IsTurnedOn { get; set; }
+
+        public void Activate(string hashedPassword)
+        {
+            State = DeviceState.Active;            
+            UserIdentity.Password = hashedPassword;
+        }
     }
 }

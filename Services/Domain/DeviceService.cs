@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.DataProtection;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Localization;
 using SmartDripper.WebAPI.Contracts.DTORequests;
+using SmartDripper.WebAPI.Contracts.DTORequests.Device;
 using SmartDripper.WebAPI.Contracts.DTOResponses;
 using SmartDripper.WebAPI.Data;
 using SmartDripper.WebAPI.Models.Users;
@@ -13,14 +15,21 @@ namespace SmartDripper.WebAPI.Services.Domain
 {
     public class DeviceService : GenericUserService
     {
-        public DeviceService(ApplicationContext applicationContext, JWTTokenService tokenService, IDataProtectionProvider provider)
-            : base(applicationContext, tokenService, provider) { }
+        private readonly DeviceHubService deviceHubService;
+        private readonly IDataProtector protector;
+
+        public DeviceService(ApplicationContext applicationContext, JWTTokenService tokenService, IDataProtectionProvider provider, IStringLocalizer localizer, DeviceHubService deviceHubService)
+            : base(applicationContext, tokenService, provider, localizer) 
+        {
+            this.deviceHubService = deviceHubService;
+            protector = provider.CreateProtector("DeviceService");
+        }
 
         public async Task<DeviceResponse> LoginAsync(LoginRequest loginRequest)
         {
             var identity = await GetIdentityAsync(loginRequest);
             var user = await applicationContext.Devices.FindAsync(identity.Id);
-            if (user == null) throw new Exception("Login failed. The user is not an device.");
+            if (user == null) throw new Exception(localizer["Login failed. The user is not an device."]);
 
             JwtSecurityToken token = tokenService.CreateJWTToken(identity);
             string encodedToken = tokenService.EncodeJWTToken(token);
@@ -33,7 +42,7 @@ namespace SmartDripper.WebAPI.Services.Domain
             Device device = await applicationContext.Devices.Include(d => d.UserIdentity).FirstOrDefaultAsync(d => d.Id == deviceId);
             UserIdentity identity = device.UserIdentity;
 
-            if (identity == null || device == null) throw new Exception("Cannot delete this device.");
+            if (identity == null || device == null) throw new Exception(localizer["Cannot delete this device."]);
 
             applicationContext.Devices.Remove(device);
             await applicationContext.SaveChangesAsync();
@@ -65,7 +74,7 @@ namespace SmartDripper.WebAPI.Services.Domain
                 .ThenInclude(p => p.Appointment).ThenInclude(a => a.Medicament).ThenInclude(m => m.MedicalProtocol).ThenInclude(mp => mp.Disease)
                 .FirstOrDefaultAsync(d => d.Id == deviceId);
 
-            if (device == null) throw new Exception("Device with this identifier doesn`t exist.");
+            if (device == null) throw new Exception(localizer["Device with this identifier doesn`t exist."]);
             return device;
         }
 
@@ -74,13 +83,13 @@ namespace SmartDripper.WebAPI.Services.Domain
             var identity = await applicationContext.UserIdentities.FindAsync(identityId);
             if (identity == null)
             {
-                throw new Exception("The user with such id was not found.");
+                throw new Exception(localizer["The user with such id was not found."]);
             }
 
             var smartDevice = await applicationContext.Devices.FindAsync(identity.Id);
             if (smartDevice == null)
             {
-                throw new Exception("The user with such id is not a smart device.");
+                throw new Exception(localizer["The user with such id is not a smart device."]);
             }
 
             string login = identity.Login;
@@ -97,7 +106,44 @@ namespace SmartDripper.WebAPI.Services.Domain
             if (request.ProcedureId != null) device.Procedure = await applicationContext.Procedures.FindAsync(request.ProcedureId);
 
             await applicationContext.SaveChangesAsync();
-            // TODO: Send message to iot
+
+            await deviceHubService.SendUpdateMessageAsync(deviceId);
+        }
+
+        public async Task ActivateAsync(DeviceActivateRequest activateRequest)
+        {
+            LoginRequest loginRequest = new LoginRequest()
+            {
+                Login = activateRequest.SerialNumber,
+                Password = activateRequest.DefaultPassword
+            };
+            Device device = await GetDeviceByLoginPassword(loginRequest);
+            if (device.State != DeviceState.Inactive)
+            {
+                throw new Exception(localizer["The smart device cannot be activated."]);
+            }
+
+            bool smartDeviceReceivedMessage = await deviceHubService.TrySendActivateMessageAsync(
+                device.Id, activateRequest.NewPassword);
+            if (!smartDeviceReceivedMessage)
+            {
+                throw new Exception(localizer["The smart device is not connected to the service."]);
+            }
+
+            device.Activate(protector.Protect(activateRequest.NewPassword));
+            await applicationContext.SaveChangesAsync();
+        }
+
+        private async Task<Device> GetDeviceByLoginPassword(LoginRequest loginRequest)
+        {
+            var identity = await GetIdentityAsync(loginRequest);
+
+            var smartDevice = await applicationContext.Devices.FindAsync(identity.Id);
+            if (smartDevice == null)
+            {
+                throw new Exception(localizer["The user with such id is not a smart device."]);
+            }
+            return smartDevice;
         }
     }
 }

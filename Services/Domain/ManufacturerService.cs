@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.DataProtection;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Localization;
 using SmartDripper.WebAPI.Contracts.DTORequests;
 using SmartDripper.WebAPI.Data;
 using SmartDripper.WebAPI.Models;
@@ -13,11 +14,13 @@ namespace SmartDripper.WebAPI.Services.Domain
     {
         private readonly ApplicationContext applicationContext;
         private readonly IDataProtector protector;
+        private readonly IStringLocalizer localizer;
 
-        public ManufacturerService(ApplicationContext applicationContext, IDataProtectionProvider provider)
+        public ManufacturerService(ApplicationContext applicationContext, IDataProtectionProvider provider, IStringLocalizer localizer)
         {
             this.applicationContext = applicationContext;
             protector = provider.CreateProtector("ManufacturerService");
+            this.localizer = localizer;
         }
 
         public async Task CreateAsync(ManufacturerRequest request)
@@ -26,7 +29,7 @@ namespace SmartDripper.WebAPI.Services.Domain
 
             var inBase = await applicationContext.Manufacturers.FirstOrDefaultAsync(x => x.Name == request.Name && x.Country == request.Country);
 
-            if (inBase != null) throw new Exception("Manufacturer already exists.");
+            if (inBase != null) throw new Exception(localizer["Manufacturer already exists."]);
 
             await applicationContext.Manufacturers.AddAsync(manufacturer);
             await applicationContext.SaveChangesAsync();
@@ -41,7 +44,7 @@ namespace SmartDripper.WebAPI.Services.Domain
         {
             Manufacturer manufacturer = await applicationContext.Manufacturers.AsNoTracking().SingleOrDefaultAsync(x => x.Id == id);
 
-            if (manufacturer == null) throw new Exception("Manufacturer with this identifier doesn`t exist.");
+            if (manufacturer == null) throw new Exception(localizer["Manufacturer with this identifier doesn`t exist."]);
 
             return manufacturer;
         }
@@ -50,7 +53,7 @@ namespace SmartDripper.WebAPI.Services.Domain
         {
             Manufacturer manufacturer = applicationContext.Manufacturers.Find(id);
 
-            if (manufacturer == null) throw new Exception("Manufacturer with this identifier doesn`t exist.");
+            if (manufacturer == null) throw new Exception(localizer["Manufacturer with this identifier doesn`t exist."]);
 
             applicationContext.Manufacturers.Remove(manufacturer);
             await applicationContext.SaveChangesAsync();
@@ -61,7 +64,7 @@ namespace SmartDripper.WebAPI.Services.Domain
             Manufacturer newManufacturer = new Manufacturer(request.Name, request.Country);
             Manufacturer manufacturer = await GetAsync(id);
 
-            if (manufacturer == null) throw new Exception("Manufacturer with this identifier doesn`t exist.");
+            if (manufacturer == null) throw new Exception(localizer["Manufacturer with this identifier doesn`t exist."]);
 
             manufacturer = newManufacturer;
             manufacturer.Id = id;

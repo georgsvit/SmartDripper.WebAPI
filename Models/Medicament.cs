@@ -7,10 +7,12 @@ namespace SmartDripper.WebAPI.Models
     {
         private Medicament() { }
 
-        public Medicament(string title, string description, Guid manufacturerId, Guid medicalProtocolId)
+        public Medicament(string title, string description, int amountInPack, Guid manufacturerId, Guid medicalProtocolId)
         {
             Title = title;
             Description = description;
+            AmountInPack = amountInPack;
+            Lack = 0;
             ManufacturerId = manufacturerId;
             MedicalProtocolId = medicalProtocolId;
             Appointments = new List<Appointment>();
@@ -24,6 +26,9 @@ namespace SmartDripper.WebAPI.Models
         public Guid? MedicalProtocolId { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
+
+        public int Lack { get; set; }
+        public int AmountInPack { get; set; }
 
         //
         public Manufacturer Manufacturer { get; set; }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.DataProtection;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Localization;
 using SmartDripper.WebAPI.Contracts.DTORequests;
 using SmartDripper.WebAPI.Data;
 using SmartDripper.WebAPI.Models;
@@ -13,11 +14,13 @@ namespace SmartDripper.WebAPI.Services.Domain
     {
         private readonly ApplicationContext applicationContext;
         private readonly IDataProtector protector;
+        private readonly IStringLocalizer localizer;
 
-        public AppointmentService(ApplicationContext applicationContext, IDataProtectionProvider provider)
+        public AppointmentService(ApplicationContext applicationContext, IDataProtectionProvider provider, IStringLocalizer localizer)
         {
             this.applicationContext = applicationContext;
             protector = provider.CreateProtector("AppointmentService");
+            this.localizer = localizer;
         }
 
         public async Task CreateAsync(AppointmentRequest request)
@@ -37,7 +40,7 @@ namespace SmartDripper.WebAPI.Services.Domain
         {
             Appointment appointment = await applicationContext.Appointments.AsNoTracking().SingleOrDefaultAsync(x => x.Id == id);
 
-            if (appointment == null) throw new Exception("Appointment with this identifier doesn`t exist.");
+            if (appointment == null) throw new Exception(localizer["Appointment with this identifier doesn`t exist."]);
 
             return appointment;
         }
@@ -46,7 +49,7 @@ namespace SmartDripper.WebAPI.Services.Domain
         {
             Appointment appointment = applicationContext.Appointments.Find(id);
 
-            if (appointment == null) throw new Exception("Appointment with this identifier doesn`t exist.");
+            if (appointment == null) throw new Exception(localizer["Appointment with this identifier doesn`t exist."]);
 
             applicationContext.Appointments.Remove(appointment);
             await applicationContext.SaveChangesAsync();
@@ -57,7 +60,7 @@ namespace SmartDripper.WebAPI.Services.Domain
             Appointment newAppointment = new Appointment((Guid)request.MedicamentId, (Guid)request.PatientId, (Guid)request.DoctorId);
             Appointment appointment = await GetAsync(id);
 
-            if (appointment == null) throw new Exception("Appointment with this identifier doesn`t exist.");
+            if (appointment == null) throw new Exception(localizer["Appointment with this identifier doesn`t exist."]);
 
             appointment = newAppointment;
             appointment.Id = id;
@@ -72,7 +75,7 @@ namespace SmartDripper.WebAPI.Services.Domain
         {
             Appointment appointment = await GetAsync(id);
 
-            if (appointment == null) throw new Exception("Appointment with this identifier doesn`t exist.");
+            if (appointment == null) throw new Exception(localizer["Appointment with this identifier doesn`t exist."]);
 
             appointment.SetDone();
             
