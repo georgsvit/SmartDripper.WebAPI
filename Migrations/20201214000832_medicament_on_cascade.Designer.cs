@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SmartDripper.WebAPI.Data;
 
 namespace SmartDripper.WebAPI.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20201214000832_medicament_on_cascade")]
+    partial class medicament_on_cascade
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -173,14 +175,9 @@ namespace SmartDripper.WebAPI.Migrations
                     b.Property<Guid?>("MedicamentId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("MedicamentId1")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("Id");
 
                     b.HasIndex("MedicamentId");
-
-                    b.HasIndex("MedicamentId1");
 
                     b.ToTable("MedicamentLogNotes");
                 });
@@ -197,14 +194,9 @@ namespace SmartDripper.WebAPI.Migrations
                     b.Property<Guid?>("MedicamentId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("MedicamentId1")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("Id");
 
                     b.HasIndex("MedicamentId");
-
-                    b.HasIndex("MedicamentId1");
 
                     b.ToTable("Orders");
                 });
@@ -287,6 +279,7 @@ namespace SmartDripper.WebAPI.Migrations
             modelBuilder.Entity("SmartDripper.WebAPI.Models.Users.Doctor", b =>
                 {
                     b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Name")
@@ -299,6 +292,8 @@ namespace SmartDripper.WebAPI.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("UserIdentityId");
 
                     b.ToTable("Doctors");
                 });
@@ -407,25 +402,15 @@ namespace SmartDripper.WebAPI.Migrations
             modelBuilder.Entity("SmartDripper.WebAPI.Models.MedicamentLogNote", b =>
                 {
                     b.HasOne("SmartDripper.WebAPI.Models.Medicament", "Medicament")
-                        .WithMany()
-                        .HasForeignKey("MedicamentId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("SmartDripper.WebAPI.Models.Medicament", null)
                         .WithMany("MedicamentLogNotes")
-                        .HasForeignKey("MedicamentId1");
+                        .HasForeignKey("MedicamentId");
                 });
 
             modelBuilder.Entity("SmartDripper.WebAPI.Models.Order", b =>
                 {
                     b.HasOne("SmartDripper.WebAPI.Models.Medicament", "Medicament")
-                        .WithMany()
-                        .HasForeignKey("MedicamentId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("SmartDripper.WebAPI.Models.Medicament", null)
                         .WithMany("Orders")
-                        .HasForeignKey("MedicamentId1");
+                        .HasForeignKey("MedicamentId");
                 });
 
             modelBuilder.Entity("SmartDripper.WebAPI.Models.Procedure", b =>
@@ -464,8 +449,8 @@ namespace SmartDripper.WebAPI.Migrations
             modelBuilder.Entity("SmartDripper.WebAPI.Models.Users.Doctor", b =>
                 {
                     b.HasOne("SmartDripper.WebAPI.Models.Users.UserIdentity", "UserIdentity")
-                        .WithOne()
-                        .HasForeignKey("SmartDripper.WebAPI.Models.Users.Doctor", "Id")
+                        .WithMany()
+                        .HasForeignKey("UserIdentityId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

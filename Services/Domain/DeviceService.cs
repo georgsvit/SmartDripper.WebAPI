@@ -97,13 +97,17 @@ namespace SmartDripper.WebAPI.Services.Domain
             await RegisterAsync(new Device(login, newPassword));
         }
 
-        public async Task UpdateConfigurationAsync(Guid deviceId, DeviceUpdateRequest request)
+        public async Task UpdateConfigurationAsync(
+            Guid deviceId, 
+            DeviceUpdateRequest request)
         {
             Device device = await GetOneAsync(deviceId);
 
             device.IsTurnedOn = request.IsTurnedOn;
             device.State = request.DeviceState;
-            if (request.ProcedureId != null) device.Procedure = await applicationContext.Procedures.FindAsync(request.ProcedureId);
+            if (request.ProcedureId != null) device.Procedure = 
+                    await applicationContext.Procedures
+                    .FindAsync(request.ProcedureId);
 
             await applicationContext.SaveChangesAsync();
 

@@ -48,6 +48,11 @@ namespace SmartDripper.WebAPI.Services.Domain
                 Comment = protector.Unprotect(patient.Comment)
             };
 
+        public string UnprotectData(String data)
+        {
+            return protector.Unprotect(data);
+        }
+
         private Patient Protect(PatientRequest request) =>
             new Patient(
                 protector.Protect(request.Name),

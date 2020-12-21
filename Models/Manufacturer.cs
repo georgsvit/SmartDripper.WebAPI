@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace SmartDripper.WebAPI.Models
 {
@@ -20,6 +21,7 @@ namespace SmartDripper.WebAPI.Models
         public string Country { get; set; }
 
         //
+        [JsonIgnore]
         public List<Medicament> Medicaments { get; set; }
     }
 }

@@ -25,10 +25,10 @@ namespace SmartDripper.WebAPI.Controllers
         }
 
         [HttpPost(Routes.Data.Import)]
-        public async Task<IActionResult> ImportData([FromForm] ImportDataRequest importDataRequest)
+        public async Task<IActionResult> ImportData([FromForm] IFormFile file)
         {
-            byte[] fileContentBytes = await ReadFileContentBytes(importDataRequest);
-            await dataService.ImportAsync(fileContentBytes);
+            byte[] fileContentBytes = await ReadFileContentBytes(file);
+            //await dataService.ImportAsync(fileContentBytes);
             return Ok();
         }
 
@@ -39,10 +39,10 @@ namespace SmartDripper.WebAPI.Controllers
             return File(fileContent, "text/plain");
         }
 
-        private async Task<byte[]> ReadFileContentBytes(ImportDataRequest importDataRequest)
+        private async Task<byte[]> ReadFileContentBytes(IFormFile importDataRequest)
         {
             byte[] fileContentBytes;
-            using (var readStream = importDataRequest.FormFile.OpenReadStream())
+            using (var readStream = importDataRequest.OpenReadStream())
             {
                 fileContentBytes = new byte[readStream.Length];
                 await readStream.ReadAsync(fileContentBytes, 0, (int)readStream.Length);

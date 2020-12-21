@@ -21,7 +21,7 @@ namespace SmartDripper.WebAPI.Controllers
         }
 
         [HttpGet(Routes.Appointment.GetAll)]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = Roles.ADMIN)]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = Roles.ADMIN + "," + Roles.DOCTOR)]
         public async Task<IActionResult> GetAll()
         {
             var list = await appointmentService.GetAll();
@@ -75,7 +75,7 @@ namespace SmartDripper.WebAPI.Controllers
         }
 
         [HttpPatch(Routes.Appointment.Edit)]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = Roles.ADMIN)]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = Roles.ADMIN + "," + Roles.DOCTOR)]
         public async Task<IActionResult> Edit([FromRoute] Guid id, [FromBody] AppointmentRequest request)
         {
             try
