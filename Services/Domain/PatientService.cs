@@ -60,7 +60,6 @@ namespace SmartDripper.WebAPI.Services.Domain
                 protector.Protect(request.DOB.ToString()),
                 protector.Protect(request.Comment));
 
-        // TODO: Get all adjacent data
         public async Task<List<PatientResponse>> GetAll()
         {
             var list = await applicationContext.Patients.ToListAsync();
@@ -70,7 +69,6 @@ namespace SmartDripper.WebAPI.Services.Domain
             return outputList;
         }
 
-        // TODO: Get all adjacent data
         public async Task<PatientResponse> GetPatientResponseAsync(Guid id)
         {
             Patient patient = await applicationContext.Patients.AsNoTracking().SingleOrDefaultAsync(x => x.Id == id);
@@ -80,7 +78,6 @@ namespace SmartDripper.WebAPI.Services.Domain
             return Unprotect(patient);
         }
 
-        // TODO: Get all adjacent data
         public async Task<Patient> GetAsync(Guid id)
         {
             Patient patient = await applicationContext.Patients.AsNoTracking().SingleOrDefaultAsync(x => x.Id == id);

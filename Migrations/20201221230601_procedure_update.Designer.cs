@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SmartDripper.WebAPI.Data;
 
 namespace SmartDripper.WebAPI.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20201221230601_procedure_update")]
+    partial class procedure_update
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -223,9 +225,6 @@ namespace SmartDripper.WebAPI.Migrations
 
                     b.Property<Guid?>("DeviceId")
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<bool>("HasProblem")
-                        .HasColumnType("bit");
 
                     b.Property<bool>("IsAutonomous")
                         .HasColumnType("bit");

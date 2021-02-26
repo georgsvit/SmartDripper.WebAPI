@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace SmartDripper.WebAPI.Options
+﻿namespace SmartDripper.WebAPI.Options
 {
     public class CultureOptions
     {

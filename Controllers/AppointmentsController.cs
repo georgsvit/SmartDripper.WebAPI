@@ -6,6 +6,7 @@ using SmartDripper.WebAPI.Contracts.DTORequests;
 using SmartDripper.WebAPI.Models;
 using SmartDripper.WebAPI.Services.Domain;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace SmartDripper.WebAPI.Controllers
@@ -21,16 +22,21 @@ namespace SmartDripper.WebAPI.Controllers
         }
 
         [HttpGet(Routes.Appointment.GetAll)]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = Roles.ADMIN + "," + Roles.DOCTOR)]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = Roles.ADMIN + "," + Roles.DOCTOR + "," + Roles.NURSE)]
         public async Task<IActionResult> GetAll()
         {
             var list = await appointmentService.GetAll();
+
+            if (User.IsInRole(Roles.NURSE))
+            {
+                return Ok(list.Where(a => !a.IsDone).ToList());
+            }
 
             return Ok(list);
         }
 
         [HttpGet(Routes.Appointment.Get)]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = Roles.ADMIN + "," + Roles.DOCTOR)]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = Roles.ADMIN + "," + Roles.DOCTOR + "," + Roles.NURSE)]
         public async Task<IActionResult> Get([FromRoute] Guid id)
         {
             try
@@ -90,7 +96,7 @@ namespace SmartDripper.WebAPI.Controllers
         }
 
         [HttpPost(Routes.Appointment.Done)]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = Roles.ADMIN + "," + Roles.DOCTOR)]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = Roles.ADMIN + "," + Roles.DOCTOR + "," + Roles.NURSE)]
         public async Task<IActionResult> Done([FromRoute] Guid id)
         {
             try

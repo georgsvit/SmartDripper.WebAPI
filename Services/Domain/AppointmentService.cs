@@ -33,7 +33,6 @@ namespace SmartDripper.WebAPI.Services.Domain
             await applicationContext.SaveChangesAsync();
         }
 
-        // TODO: Get all adjacent data
         public async Task<List<Appointment>> GetAll()
         {
             var patients = await patientService.GetAll();
@@ -47,13 +46,23 @@ namespace SmartDripper.WebAPI.Services.Domain
 
             return list;
         }
-            
 
-        // TODO: Get all adjacent data
         public async Task<Appointment> GetAsync(Guid id)
         {
             Appointment appointment = await applicationContext.Appointments.Include(a => a.Patient).Include(a => a.Medicament).Include(a => a.Doctor).AsNoTracking().SingleOrDefaultAsync(x => x.Id == id);
+            if (appointment == null) throw new Exception(localizer["Appointment with this identifier doesn`t exist."]);
 
+            var patients = await patientService.GetAll();
+            var patient = patients.Find(x => x.Id == appointment.PatientId);
+            appointment.Patient.Name = patient.Name;
+            appointment.Patient.Surname = patient.Surname;
+
+            return appointment;
+        }
+
+        public async Task<Appointment> GetFlatAsync(Guid id)
+        {
+            Appointment appointment = await applicationContext.Appointments.Include(a => a.Patient).Include(a => a.Medicament).Include(a => a.Doctor).AsNoTracking().SingleOrDefaultAsync(x => x.Id == id);
             if (appointment == null) throw new Exception(localizer["Appointment with this identifier doesn`t exist."]);
 
             return appointment;
@@ -87,12 +96,12 @@ namespace SmartDripper.WebAPI.Services.Domain
 
         public async Task SetDoneAsync(Guid id)
         {
-            Appointment appointment = await GetAsync(id);
+            Appointment appointment = await GetFlatAsync(id);
 
             if (appointment == null) throw new Exception(localizer["Appointment with this identifier doesn`t exist."]);
 
             appointment.SetDone();
-            
+
             applicationContext.Appointments.Update(appointment);
             await applicationContext.SaveChangesAsync();
         }

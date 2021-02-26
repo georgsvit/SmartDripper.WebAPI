@@ -3,12 +3,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SmartDripper.WebAPI.Contracts;
-using SmartDripper.WebAPI.Contracts.DTORequests;
 using SmartDripper.WebAPI.Models;
 using SmartDripper.WebAPI.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace SmartDripper.WebAPI.Controllers
@@ -28,7 +24,7 @@ namespace SmartDripper.WebAPI.Controllers
         public async Task<IActionResult> ImportData([FromForm] IFormFile file)
         {
             byte[] fileContentBytes = await ReadFileContentBytes(file);
-            //await dataService.ImportAsync(fileContentBytes);
+            await dataService.ImportAsync(fileContentBytes);
             return Ok();
         }
 

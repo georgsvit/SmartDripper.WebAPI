@@ -4,7 +4,6 @@ using Microsoft.Extensions.Localization;
 using SmartDripper.WebAPI.Contracts.DTORequests;
 using SmartDripper.WebAPI.Contracts.DTOResponses;
 using SmartDripper.WebAPI.Data;
-using SmartDripper.WebAPI.Models;
 using SmartDripper.WebAPI.Models.Users;
 using System;
 using System.Collections.Generic;
@@ -91,7 +90,7 @@ namespace SmartDripper.WebAPI.Services.Domain
             {
                 applicationContext.UserIdentities.Remove(identity);
                 await applicationContext.SaveChangesAsync();
-            }            
+            }
         }
 
         public async Task EditAsync(Guid id, DetailedRegistrationRequest request, string role)

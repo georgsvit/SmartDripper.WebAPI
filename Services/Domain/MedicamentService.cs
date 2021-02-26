@@ -35,11 +35,9 @@ namespace SmartDripper.WebAPI.Services.Domain
             await applicationContext.SaveChangesAsync();
         }
 
-        // TODO: Get all adjacent data
         public async Task<List<Medicament>> GetAll() =>
             await applicationContext.Medicaments.Include(m => m.MedicalProtocol).Include(m => m.Manufacturer).ToListAsync();
 
-        // TODO: Get all adjacent data
         public async Task<Medicament> GetAsync(Guid id)
         {
             Medicament medicament = await applicationContext.Medicaments.Include(m => m.MedicalProtocol).Include(m => m.Manufacturer).AsNoTracking().SingleOrDefaultAsync(x => x.Id == id);

@@ -1,4 +1,6 @@
-﻿namespace SmartDripper.WebAPI.Models.Users
+﻿using System.Text.Json.Serialization;
+
+namespace SmartDripper.WebAPI.Models.Users
 {
     public enum DeviceState
     {
@@ -19,13 +21,14 @@
             Procedure = null;
         }
 
+        [JsonIgnore]
         public Procedure Procedure { get; set; }
         public DeviceState State { get; set; }
         public bool IsTurnedOn { get; set; }
 
         public void Activate(string hashedPassword)
         {
-            State = DeviceState.Active;            
+            State = DeviceState.Active;
             UserIdentity.Password = hashedPassword;
         }
     }
