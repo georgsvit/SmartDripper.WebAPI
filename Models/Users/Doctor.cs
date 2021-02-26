@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace SmartDripper.WebAPI.Models.Users
 {
@@ -12,6 +13,7 @@ namespace SmartDripper.WebAPI.Models.Users
             Appointments = new List<Appointment>();
         }
 
+        [JsonIgnore]
         public List<Appointment> Appointments { get; set; }
     }
 }

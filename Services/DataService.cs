@@ -3,7 +3,6 @@ using Microsoft.EntityFrameworkCore;
 using SmartDripper.WebAPI.Contracts;
 using SmartDripper.WebAPI.Data;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
@@ -83,7 +82,7 @@ namespace SmartDripper.WebAPI.Services
             await applicationContext.Orders.AddRangeAsync(serviceData.Orders);
             await applicationContext.Patients.AddRangeAsync(serviceData.Patients);
             await applicationContext.Procedures.AddRangeAsync(serviceData.Procedures);
-            
+
 
             await applicationContext.SaveChangesAsync();
         }

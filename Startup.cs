@@ -36,6 +36,9 @@ namespace SmartDripper.WebAPI
 
             SetCultureConfigurationValues(cultureOptions, out string defaultCultureName, out CultureInfo[] supportedCultures);
 
+            app.UseStaticFiles();
+
+
             app.UseRequestLocalization(new RequestLocalizationOptions
             {
                 DefaultRequestCulture = new RequestCulture(defaultCultureName),

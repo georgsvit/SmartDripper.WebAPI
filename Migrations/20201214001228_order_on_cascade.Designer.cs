@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SmartDripper.WebAPI.Data;
 
 namespace SmartDripper.WebAPI.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20201214001228_order_on_cascade")]
+    partial class order_on_cascade
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -218,32 +220,14 @@ namespace SmartDripper.WebAPI.Migrations
                     b.Property<Guid?>("AppointmentId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int?>("BloodPressure")
-                        .HasColumnType("int");
-
                     b.Property<Guid?>("DeviceId")
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<bool>("HasProblem")
-                        .HasColumnType("bit");
 
                     b.Property<bool>("IsAutonomous")
                         .HasColumnType("bit");
 
                     b.Property<Guid?>("NurseId")
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<int?>("Pulse")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("Speed")
-                        .HasColumnType("int");
-
-                    b.Property<double?>("Temperature")
-                        .HasColumnType("float");
-
-                    b.Property<int?>("Volume")
-                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -305,6 +289,7 @@ namespace SmartDripper.WebAPI.Migrations
             modelBuilder.Entity("SmartDripper.WebAPI.Models.Users.Doctor", b =>
                 {
                     b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Name")
@@ -317,6 +302,8 @@ namespace SmartDripper.WebAPI.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("UserIdentityId");
 
                     b.ToTable("Doctors");
                 });
@@ -482,8 +469,8 @@ namespace SmartDripper.WebAPI.Migrations
             modelBuilder.Entity("SmartDripper.WebAPI.Models.Users.Doctor", b =>
                 {
                     b.HasOne("SmartDripper.WebAPI.Models.Users.UserIdentity", "UserIdentity")
-                        .WithOne()
-                        .HasForeignKey("SmartDripper.WebAPI.Models.Users.Doctor", "Id")
+                        .WithMany()
+                        .HasForeignKey("UserIdentityId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

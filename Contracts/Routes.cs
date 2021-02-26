@@ -26,6 +26,16 @@
             public const string Register = Base + "/register";
         }
 
+        public static class User
+        {
+            public const string Base = "users";
+
+            public const string GetAll = Base + "/{role}";
+            public const string Delete = Base + "/{role}/delete/{Id}";
+            public const string Edit = Base + "/{role}/edit/{Id}";
+            public const string Create = Base + "/{role}/create";
+        }
+
         public static class Device
         {
             public const string Base = "devices";

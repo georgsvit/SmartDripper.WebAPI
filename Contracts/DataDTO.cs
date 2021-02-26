@@ -1,9 +1,6 @@
 ﻿using SmartDripper.WebAPI.Models;
 using SmartDripper.WebAPI.Models.Users;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace SmartDripper.WebAPI.Contracts
 {
@@ -11,19 +8,19 @@ namespace SmartDripper.WebAPI.Contracts
     {
         private DataDTO() { }
 
-        public DataDTO(List<Admin> admins, 
-                       List<Device> devices, 
-                       List<Doctor> doctors, 
-                       List<Nurse> nurses, 
-                       List<UserIdentity> userIdentities, 
-                       List<Appointment> appointments, 
-                       List<Disease> diseases, 
-                       List<Manufacturer> manufacturers, 
-                       List<MedicalProtocol> medicalProtocols, 
-                       List<Medicament> medicaments, 
-                       List<MedicamentLogNote> medicamentLogNotes, 
-                       List<Order> orders, 
-                       List<Patient> patients, 
+        public DataDTO(List<Admin> admins,
+                       List<Device> devices,
+                       List<Doctor> doctors,
+                       List<Nurse> nurses,
+                       List<UserIdentity> userIdentities,
+                       List<Appointment> appointments,
+                       List<Disease> diseases,
+                       List<Manufacturer> manufacturers,
+                       List<MedicalProtocol> medicalProtocols,
+                       List<Medicament> medicaments,
+                       List<MedicamentLogNote> medicamentLogNotes,
+                       List<Order> orders,
+                       List<Patient> patients,
                        List<Procedure> procedures)
         {
             Admins = admins;

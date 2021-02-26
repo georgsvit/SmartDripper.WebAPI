@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace SmartDripper.WebAPI.Models
 {
@@ -34,6 +35,7 @@ namespace SmartDripper.WebAPI.Models
         public int MinBloodPressure { get; set; }
 
         //
+        [JsonIgnore]
         public List<Medicament> Medicaments { get; set; }
         public Disease Disease { get; set; }
     }

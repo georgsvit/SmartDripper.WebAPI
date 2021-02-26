@@ -73,8 +73,6 @@ namespace SmartDripper.WebAPI.Controllers
             }
         }
 
-        // TODO: Return device with all adjacent objects (now only device)
-
         [HttpGet(Routes.Device.GetAll)]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = Roles.ADMIN + "," + Roles.NURSE)]
         public async Task<IActionResult> GetAllAsync()
@@ -83,20 +81,17 @@ namespace SmartDripper.WebAPI.Controllers
 
             if (User.IsInRole(Roles.ADMIN))
             {
-                //var response = mapper.Map<List<DeviceGetAllResponseAdmin>>(devices);
                 return Ok(devices);
             }
 
             if (User.IsInRole(Roles.NURSE))
             {
-                //var response = mapper.Map<List<DeviceGetAllResponseNurse>>(devices.Where(d => d.State == DeviceState.Inactive));
-                return Ok(devices.Where(d => d.State == DeviceState.Inactive));
+                var response = devices.Where(d => d.State == DeviceState.Inactive).ToList();
+                return Ok(response);
             }
 
             return BadRequest();
         }
-
-        // TODO: Return device with all adjacent objects (now only device)
 
         [HttpGet(Routes.Device.Get)]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = Roles.ADMIN + "," + Roles.NURSE)]

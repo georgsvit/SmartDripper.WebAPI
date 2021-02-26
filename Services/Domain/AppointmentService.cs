@@ -15,12 +15,14 @@ namespace SmartDripper.WebAPI.Services.Domain
         private readonly ApplicationContext applicationContext;
         private readonly IDataProtector protector;
         private readonly IStringLocalizer localizer;
+        private readonly PatientService patientService;
 
-        public AppointmentService(ApplicationContext applicationContext, IDataProtectionProvider provider, IStringLocalizer localizer)
+        public AppointmentService(ApplicationContext applicationContext, IDataProtectionProvider provider, IStringLocalizer localizer, PatientService patientService)
         {
             this.applicationContext = applicationContext;
             protector = provider.CreateProtector("AppointmentService");
             this.localizer = localizer;
+            this.patientService = patientService;
         }
 
         public async Task CreateAsync(AppointmentRequest request)
@@ -31,15 +33,36 @@ namespace SmartDripper.WebAPI.Services.Domain
             await applicationContext.SaveChangesAsync();
         }
 
-        // TODO: Get all adjacent data
-        public async Task<List<Appointment>> GetAll() =>
-            await applicationContext.Appointments.ToListAsync();
+        public async Task<List<Appointment>> GetAll()
+        {
+            var patients = await patientService.GetAll();
+            var list = await applicationContext.Appointments.Include(a => a.Patient).Include(a => a.Medicament).ThenInclude(m => m.Manufacturer).Include(a => a.Doctor).ToListAsync();
+            foreach (var i in list)
+            {
+                var patient = patients.Find(x => x.Id == i.Patient.Id);
+                i.Patient.Name = patient.Name;
+                i.Patient.Surname = patient.Surname;
+            }
 
-        // TODO: Get all adjacent data
+            return list;
+        }
+
         public async Task<Appointment> GetAsync(Guid id)
         {
-            Appointment appointment = await applicationContext.Appointments.AsNoTracking().SingleOrDefaultAsync(x => x.Id == id);
+            Appointment appointment = await applicationContext.Appointments.Include(a => a.Patient).Include(a => a.Medicament).Include(a => a.Doctor).AsNoTracking().SingleOrDefaultAsync(x => x.Id == id);
+            if (appointment == null) throw new Exception(localizer["Appointment with this identifier doesn`t exist."]);
 
+            var patients = await patientService.GetAll();
+            var patient = patients.Find(x => x.Id == appointment.PatientId);
+            appointment.Patient.Name = patient.Name;
+            appointment.Patient.Surname = patient.Surname;
+
+            return appointment;
+        }
+
+        public async Task<Appointment> GetFlatAsync(Guid id)
+        {
+            Appointment appointment = await applicationContext.Appointments.Include(a => a.Patient).Include(a => a.Medicament).Include(a => a.Doctor).AsNoTracking().SingleOrDefaultAsync(x => x.Id == id);
             if (appointment == null) throw new Exception(localizer["Appointment with this identifier doesn`t exist."]);
 
             return appointment;
@@ -73,12 +96,12 @@ namespace SmartDripper.WebAPI.Services.Domain
 
         public async Task SetDoneAsync(Guid id)
         {
-            Appointment appointment = await GetAsync(id);
+            Appointment appointment = await GetFlatAsync(id);
 
             if (appointment == null) throw new Exception(localizer["Appointment with this identifier doesn`t exist."]);
 
             appointment.SetDone();
-            
+
             applicationContext.Appointments.Update(appointment);
             await applicationContext.SaveChangesAsync();
         }

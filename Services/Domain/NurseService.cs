@@ -23,7 +23,7 @@ namespace SmartDripper.WebAPI.Services.Domain
             JwtSecurityToken token = tokenService.CreateJWTToken(identity);
             string encodedToken = tokenService.EncodeJWTToken(token);
 
-            return new NurseResponse(user.Name, user.Surname, identity.Role, user.Procedures, encodedToken, token.ValidTo);
+            return new NurseResponse(identity.Id, user.Name, user.Surname, identity.Role, user.Procedures, encodedToken, token.ValidTo);
         }
     }
 }

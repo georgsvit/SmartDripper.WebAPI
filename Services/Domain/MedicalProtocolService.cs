@@ -35,14 +35,12 @@ namespace SmartDripper.WebAPI.Services.Domain
             await applicationContext.SaveChangesAsync();
         }
 
-        // TODO: Get all adjacent data
         public async Task<List<MedicalProtocol>> GetAll() =>
-            await applicationContext.MedicalProtocols.ToListAsync();
+            await applicationContext.MedicalProtocols.Include(mp => mp.Disease).ToListAsync();
 
-        // TODO: Get all adjacent data
         public async Task<MedicalProtocol> GetAsync(Guid id)
         {
-            MedicalProtocol medicalProtocol = await applicationContext.MedicalProtocols.AsNoTracking().SingleOrDefaultAsync(x => x.Id == id);
+            MedicalProtocol medicalProtocol = await applicationContext.MedicalProtocols.Include(mp => mp.Disease).AsNoTracking().SingleOrDefaultAsync(x => x.Id == id);
 
             if (medicalProtocol == null) throw new Exception(localizer["MedicalProtocol with this identifier doesn`t exist."]);
 

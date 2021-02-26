@@ -1,8 +1,6 @@
 ﻿using SmartDripper.WebAPI.Data;
 using SmartDripper.WebAPI.Models;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace SmartDripper.WebAPI.Services.Domain

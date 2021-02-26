@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SmartDripper.WebAPI.Data;
 
 namespace SmartDripper.WebAPI.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20201215143650_doctor-ondelete")]
+    partial class doctorondelete
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -218,32 +220,14 @@ namespace SmartDripper.WebAPI.Migrations
                     b.Property<Guid?>("AppointmentId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int?>("BloodPressure")
-                        .HasColumnType("int");
-
                     b.Property<Guid?>("DeviceId")
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<bool>("HasProblem")
-                        .HasColumnType("bit");
 
                     b.Property<bool>("IsAutonomous")
                         .HasColumnType("bit");
 
                     b.Property<Guid?>("NurseId")
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<int?>("Pulse")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("Speed")
-                        .HasColumnType("int");
-
-                    b.Property<double?>("Temperature")
-                        .HasColumnType("float");
-
-                    b.Property<int?>("Volume")
-                        .HasColumnType("int");
 
                     b.HasKey("Id");
 

@@ -8,12 +8,26 @@ namespace SmartDripper.WebAPI.Data
     public class ApplicationContext : DbContext
     {
         public ApplicationContext(DbContextOptions<ApplicationContext> options)
-            : base(options) { }
+            : base(options) 
+        {
+            Database.EnsureCreated();
+        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Device>().HasOne(d => d.Procedure).WithOne(p => p.Device).HasForeignKey<Procedure>(p => p.DeviceId);
-            //AddDefaultAppAdmin(modelBuilder);
+            AddDefaultAppAdmin(modelBuilder);
+
+            modelBuilder.Entity<MedicalProtocol>().HasOne(mp => mp.Disease).WithMany().HasForeignKey(d => d.DiseaseId).OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<MedicalProtocol>().HasMany(mp => mp.Medicaments).WithOne(m => m.MedicalProtocol).OnDelete(DeleteBehavior.Cascade);
+            modelBuilder.Entity<Manufacturer>().HasMany(m => m.Medicaments).WithOne(m => m.Manufacturer).OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<MedicamentLogNote>().HasOne(mln => mln.Medicament).WithMany().HasForeignKey(mln => mln.MedicamentId).OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Order>().HasOne(o => o.Medicament).WithMany().HasForeignKey(o => o.MedicamentId).OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Doctor>().HasOne(d => d.UserIdentity).WithOne().HasForeignKey<Doctor>(d => d.Id).OnDelete(DeleteBehavior.Cascade);
         }
 
         private void AddDefaultAppAdmin(ModelBuilder builder)

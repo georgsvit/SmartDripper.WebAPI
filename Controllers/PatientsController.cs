@@ -22,7 +22,7 @@ namespace SmartDripper.WebAPI.Controllers
         }
 
         [HttpGet(Routes.Patient.GetAll)]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = Roles.ADMIN)]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = Roles.ADMIN + "," + Roles.DOCTOR)]
         public async Task<IActionResult> GetAll()
         {
             var list = await patientService.GetAll();

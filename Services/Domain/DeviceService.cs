@@ -19,7 +19,7 @@ namespace SmartDripper.WebAPI.Services.Domain
         private readonly IDataProtector protector;
 
         public DeviceService(ApplicationContext applicationContext, JWTTokenService tokenService, IDataProtectionProvider provider, IStringLocalizer localizer, DeviceHubService deviceHubService)
-            : base(applicationContext, tokenService, provider, localizer) 
+            : base(applicationContext, tokenService, provider, localizer)
         {
             this.deviceHubService = deviceHubService;
             protector = provider.CreateProtector("DeviceService");
@@ -54,12 +54,6 @@ namespace SmartDripper.WebAPI.Services.Domain
         public async Task<List<Device>> GetAllDevicesAsync() =>
             await applicationContext.Devices
                 .Include(d => d.UserIdentity)
-                .Include(d => d.Procedure)
-                .ThenInclude(p => p.Nurse)
-                .Include(d => d.Procedure)
-                .ThenInclude(p => p.Appointment).ThenInclude(a => a.Patient)
-                .Include(d => d.Procedure)
-                .ThenInclude(p => p.Appointment).ThenInclude(a => a.Medicament).ThenInclude(m => m.MedicalProtocol).ThenInclude(mp => mp.Disease)
                 .ToListAsync();
 
         public async Task<Device> GetOneAsync(Guid deviceId)
@@ -97,17 +91,30 @@ namespace SmartDripper.WebAPI.Services.Domain
             await RegisterAsync(new Device(login, newPassword));
         }
 
-        public async Task UpdateConfigurationAsync(Guid deviceId, DeviceUpdateRequest request)
+        public async Task UpdateConfigurationAsync(
+            Guid deviceId,
+            DeviceUpdateRequest request)
         {
             Device device = await GetOneAsync(deviceId);
 
             device.IsTurnedOn = request.IsTurnedOn;
             device.State = request.DeviceState;
-            if (request.ProcedureId != null) device.Procedure = await applicationContext.Procedures.FindAsync(request.ProcedureId);
+            if (request.ProcedureId != null) device.Procedure =
+                    await applicationContext.Procedures
+                    .FindAsync(request.ProcedureId);
 
             await applicationContext.SaveChangesAsync();
 
             await deviceHubService.SendUpdateMessageAsync(deviceId);
+        }
+
+        public async Task SetDeviceStateAsync(Guid id, DeviceState state)
+        {
+            Device device = await GetOneAsync(id);
+
+            device.State = state;
+
+            await applicationContext.SaveChangesAsync();
         }
 
         public async Task ActivateAsync(DeviceActivateRequest activateRequest)
