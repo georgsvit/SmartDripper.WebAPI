@@ -14,7 +14,7 @@ The main idea of the "SmartDripper" software system is to simplify the work of m
 ## **Technologies**
 - ASP.Net Core 3.1 (MVC)
 - Entity Framework Core 3.1
-- JWT Tokens Authentication
+- JWT Authentication
 
 ## **Setup**
 To run this project, download it and open with Visual Studio. Before start up ypu should specify database connection string in file **secrets.json**.
