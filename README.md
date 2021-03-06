@@ -12,7 +12,7 @@ The main idea of the "SmartDripper" software system is to simplify the work of m
 ---
 
 ## **Technologies**
-- ASP.Net Core 3.1 (MVC)
+- ASP.Net Core 3.1
 - Entity Framework Core 3.1
 - JWT Authentication
 
